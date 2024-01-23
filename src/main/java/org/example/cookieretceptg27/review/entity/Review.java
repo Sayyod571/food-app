@@ -25,4 +25,25 @@ public class Review {
     @ManyToOne
     private Recipe recipe_id;
     private Double stars;
+    @ManyToOne(optional = false)
+    private Recipe recipes;
+
+    public Recipe getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Recipe recipes) {
+        this.recipes = recipes;
+    }
+
+    @ManyToOne(optional = false)
+    private User users;
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 }

@@ -1,12 +1,10 @@
 package org.example.cookieretceptg27.ingrident.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.cookieretceptg27.attachment.entity.Attachment;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
-import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredient;
+import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredients;
 
 import java.util.UUID;
 @AllArgsConstructor
@@ -22,15 +20,7 @@ public class Ingrident {
     private Recipe recipe_id;
     @OneToOne
     private Attachment attachment;
-
     @ManyToOne(optional = false)
-    private RecipeIngredient recipeIngredients;
+    private RecipeIngredients recipeIngredients;
 
-    public RecipeIngredient getRecipeIngredients() {
-        return recipeIngredients;
-    }
-
-    public void setRecipeIngredients(RecipeIngredient recipeIngredients) {
-        this.recipeIngredients = recipeIngredients;
-    }
 }

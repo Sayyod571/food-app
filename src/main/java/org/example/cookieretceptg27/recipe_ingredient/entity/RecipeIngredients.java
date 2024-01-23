@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @Entity
-public class RecipeIngredient {
+public class RecipeIngredients {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID uuid;
@@ -27,7 +27,6 @@ public class RecipeIngredient {
     private Measurement measurement;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
     @OneToMany(mappedBy = "recipeIngredients", fetch = FetchType.EAGER)

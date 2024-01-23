@@ -15,10 +15,6 @@ import java.util.UUID;
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(name = "unique_order_recipe", columnNames = {"order", "recipe_id"})
-        },
-        indexes = {
-                @Index(name = "idx_order", columnList = "order"),
-                @Index(name = "idx_recipe", columnList = "recipe_id")
         }
 )
 public class Step {
@@ -27,7 +23,7 @@ public class Step {
 
     private String detail;
     private String name;
-    private Integer order;
+    private Integer order_Number;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")  // Assuming there is a "recipe_id" column in the database

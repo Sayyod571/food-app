@@ -31,18 +31,18 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user_id", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<View> views;
 
     @OneToOne
     private Attachment attachment;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "user_id", fetch = FetchType.EAGER)  // Updated mappedBy attribute to "user"
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)  // Updated mappedBy attribute to "user"
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<Followers> followers;
 }

@@ -24,4 +24,14 @@ public class View {
     @Id
     @ManyToOne
     private Recipe recipe_id;
+    @ManyToOne(optional = false)
+    private User users;
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 }

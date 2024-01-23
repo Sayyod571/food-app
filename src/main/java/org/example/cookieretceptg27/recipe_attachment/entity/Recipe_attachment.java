@@ -24,4 +24,14 @@ public class Recipe_attachment {
     @Id
     @ManyToOne
     private Recipe recipe_id;
+    @ManyToOne(optional = false)
+    private Recipe recipes;
+
+    public Recipe getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Recipe recipes) {
+        this.recipes = recipes;
+    }
 }

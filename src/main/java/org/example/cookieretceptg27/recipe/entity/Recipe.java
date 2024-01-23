@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.cookieretceptg27.category.entity.Category;
 import org.example.cookieretceptg27.recipe_attachment.entity.Recipe_attachment;
-import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredient;
+import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredients;
 import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.entity.User;
 import org.example.cookieretceptg27.review.entity.Review;
@@ -27,16 +27,26 @@ public class Recipe {
     @Column(nullable = false)
     private Integer duration;
     @OneToMany(mappedBy = "recipe",fetch = FetchType.EAGER)
-    private List<RecipeIngredient>recipeIngredients;
+    private List<RecipeIngredients>recipeIngredients;
     @OneToMany(mappedBy = "recipe",fetch = FetchType.EAGER)
     private List<Step>steps;
-    @OneToMany(mappedBy = "recipe_id",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
     private List<Recipe_attachment>recipeAttachments;
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
-    @OneToMany(mappedBy = "recipe_id",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
     private List<Review>reviews;
-    @OneToOne(mappedBy = "recipe")
+    @OneToOne
     private Category category;
 
+    @ManyToOne(optional = false)
+    private User users;
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 }
