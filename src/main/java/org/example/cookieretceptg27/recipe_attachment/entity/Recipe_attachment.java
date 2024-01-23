@@ -27,11 +27,5 @@ public class Recipe_attachment {
     @ManyToOne(optional = false)
     private Recipe recipes;
 
-    public Recipe getRecipes() {
-        return recipes;
-    }
 
-    public void setRecipes(Recipe recipes) {
-        this.recipes = recipes;
-    }
 }

@@ -22,11 +22,5 @@ public class Category {
     @OneToOne(mappedBy = "category", optional = false)
     private Recipe recipe2;
 
-    public Recipe getRecipe2() {
-        return recipe2;
-    }
 
-    public void setRecipe2(Recipe recipe2) {
-        this.recipe2 = recipe2;
-    }
 }
