@@ -1,9 +1,7 @@
 package org.example.cookieretceptg27.recipe.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.cookieretceptg27.category.entity.Category;
 import org.example.cookieretceptg27.recipe_attachment.entity.Recipe_attachment;
 import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredients;
@@ -16,11 +14,13 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "'recipe'")
 public class Recipe {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @Column(nullable = false)
     private String name;

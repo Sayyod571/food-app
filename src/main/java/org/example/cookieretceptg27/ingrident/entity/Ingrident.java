@@ -9,10 +9,12 @@ import org.example.cookieretceptg27.recipe_ingredient.entity.RecipeIngredients;
 import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 public class Ingrident {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
     @Column(nullable = false)
     private String name;

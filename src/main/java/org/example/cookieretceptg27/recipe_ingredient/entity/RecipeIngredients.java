@@ -1,9 +1,7 @@
 package org.example.cookieretceptg27.recipe_ingredient.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.cookieretceptg27.enums.Measurement;
 import org.example.cookieretceptg27.ingrident.entity.Ingrident;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
@@ -13,7 +11,8 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 public class RecipeIngredients {
     @Id

@@ -1,9 +1,7 @@
 package org.example.cookieretceptg27.attachment.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.cookieretceptg27.enums.FileType;
 import org.example.cookieretceptg27.recipe_attachment.entity.Recipe_attachment;
 
@@ -12,11 +10,13 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Generated
+@Setter
 @Entity
 @Table(name = "'attachment'")
 public class Attachment {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @Column(nullable = false,unique = true)
     private String file_name;

@@ -1,16 +1,15 @@
 package org.example.cookieretceptg27.step.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(
         uniqueConstraints = {
@@ -19,6 +18,7 @@ import java.util.UUID;
 )
 public class Step {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String detail;
