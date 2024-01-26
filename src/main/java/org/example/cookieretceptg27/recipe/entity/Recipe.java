@@ -9,6 +9,7 @@ import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.entity.User;
 import org.example.cookieretceptg27.review.entity.Review;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,6 +42,6 @@ public class Recipe {
 
     @ManyToOne(optional = false)
     private User users;
-
+    private LocalDateTime searchDate;
 
 }
