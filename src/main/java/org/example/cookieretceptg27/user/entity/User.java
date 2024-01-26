@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.cookieretceptg27.attachment.entity.Attachment;
@@ -44,7 +45,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<View> views;
 
-    @OneToOne
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Attachment attachment;
 
     @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
