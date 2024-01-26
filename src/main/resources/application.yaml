@@ -1,8 +1,41 @@
+server:
+  port: 8080
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5432/food_recipe
     username: postgres
-    password: 123
+    password: your postgres password
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your email address
+    password: your secret key
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    default-encoding: UTF-8
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:  your client id
+            client-secret: your client secret
+            scope:
+              - email
+              - profile
+          github:
+            client-id: 414a00ebf83dd1242386
+            client-secret: d59b3e2b4f9edb88a8fcc1c477b76e8d3454df18
+            scope:
+              - user:email
+              - user:name
+              - user:location
   jpa:
     properties:
       hibernate:
@@ -10,4 +43,8 @@ spring:
         show_sql: true
     hibernate:
       ddl-auto: update
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+security:
+    jwt:
+      key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
