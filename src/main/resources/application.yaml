@@ -1,11 +1,13 @@
 server:
   port: 8080
+  upload:
+    dir: C:\Users\Aziz6\OneDrive\Документы\git\Cooking2\src\main\resources\img
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/food_recipe
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
-    password: your postgres password
+    password: 123
   mail:
     host: smtp.gmail.com
     port: 587
