@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,10 +18,6 @@ public class Category {
     private UUID id;
     @Column(unique = true,nullable = false)
     private String name;
-    @OneToOne
-    private Recipe recipe;
-    @OneToOne(mappedBy = "category", optional = false)
-    private Recipe recipe2;
-
-
+    @OneToMany(mappedBy = "categories",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    private List<Recipe> recipes;
 }

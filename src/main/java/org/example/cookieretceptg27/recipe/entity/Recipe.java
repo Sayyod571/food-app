@@ -18,7 +18,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "'recipe'")
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,21 +26,24 @@ public class Recipe {
     private String name;
     @Column(nullable = false)
     private Integer duration;
-    @OneToMany(mappedBy = "recipe",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipe",fetch = FetchType.LAZY)
     private List<RecipeIngredients>recipeIngredients;
-    @OneToMany(mappedBy = "recipe",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipe",fetch = FetchType.LAZY)
     private List<Step>steps;
-    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipes",fetch = FetchType.LAZY)
     private List<Recipe_attachment>recipeAttachments;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipes",fetch = FetchType.LAZY)
     private List<Review>reviews;
-    @OneToOne
+    @ManyToOne
     private Category category;
 
     @ManyToOne(optional = false)
     private User users;
     private LocalDateTime searchDate;
+
+    @ManyToOne(optional = false)
+    private Category categories;
 
 }

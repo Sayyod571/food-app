@@ -30,7 +30,10 @@ public class SecurityConfiguration
             "/webjars/**",
             "/api/***",
             "/auth/***",
-            "/auth/otp/*"
+            "/auth/otp/*",
+            "/recipe/**",
+            "/recipe/**"
+            ,"/category/**"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{

@@ -32,18 +32,18 @@ public abstract class GenericCrudService<ENTITY, ID, CREATE_DTO, UPDATE_DTO, PAT
         if( specification == null )
         {
             return getRepository().findAll( pageable )
-                                  .map( entity -> getMapper().toResponseDto( entity ) );
+                    .map( entity -> getMapper().toResponseDto( entity ) );
         }
         return getRepository().findAll( specification, pageable )
-                              .map( entity -> getMapper().toResponseDto( entity ) );
+                .map( entity -> getMapper().toResponseDto( entity ) );
     }
 
 
     public RESPONSE_DTO getById( ID id )
     {
         ENTITY entity = getRepository()
-            .findById( id )
-            .orElseThrow( () -> throwEntityNotFoundException( id, getEntityClass().getSimpleName() ) );
+                .findById( id )
+                .orElseThrow( () -> throwEntityNotFoundException( id, getEntityClass().getSimpleName() ) );
         return getMapper().toResponseDto( entity );
     }
 
@@ -59,8 +59,8 @@ public abstract class GenericCrudService<ENTITY, ID, CREATE_DTO, UPDATE_DTO, PAT
     public RESPONSE_DTO update( ID id, UPDATE_DTO updateDto )
     {
         ENTITY entity = getRepository()
-            .findById( id )
-            .orElseThrow( () -> throwEntityNotFoundException( id, getEntityClass().getSimpleName() ) );
+                .findById( id )
+                .orElseThrow( () -> throwEntityNotFoundException( id, getEntityClass().getSimpleName() ) );
         ENTITY saved = updateEntity( updateDto, entity );
         return getMapper().toResponseDto( saved );
     }
@@ -68,7 +68,7 @@ public abstract class GenericCrudService<ENTITY, ID, CREATE_DTO, UPDATE_DTO, PAT
     public RESPONSE_DTO patch( ID id, PATCH_DTO patchDto ) throws IllegalAccessException, NoSuchFieldException
     {
         ENTITY entity = getRepository().findById( id )
-                                       .orElseThrow( EntityNotFoundException::new );
+                .orElseThrow( EntityNotFoundException::new );
 
         Class<?> entityClass = entity.getClass();
         Class<?> patchDtoClass = patchDto.getClass();
