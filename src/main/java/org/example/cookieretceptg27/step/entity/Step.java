@@ -25,7 +25,7 @@ public class Step {
     private String name;
     private Integer order_Number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id")  // Assuming there is a "recipe_id" column in the database
     private Recipe recipe;
 }

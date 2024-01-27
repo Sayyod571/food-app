@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<View> views;
 
 
@@ -50,13 +50,13 @@ public class User implements UserDetails {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Attachment attachment;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)  // Updated mappedBy attribute to "user"
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)  // Updated mappedBy attribute to "user"
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Followers> followers;
 
     @Override

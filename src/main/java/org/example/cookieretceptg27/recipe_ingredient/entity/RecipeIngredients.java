@@ -25,9 +25,9 @@ public class RecipeIngredients {
     @Enumerated(EnumType.STRING)
     private Measurement measurement;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Recipe recipe;
 
-    @OneToMany(mappedBy = "recipeIngredients", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recipeIngredients", fetch = FetchType.LAZY)
     private List<Ingrident> ingredients;
 }
