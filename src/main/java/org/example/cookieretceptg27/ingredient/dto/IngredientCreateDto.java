@@ -19,7 +19,7 @@ public class IngredientCreateDto {
 
     private Measurement measurement;
 
-    private MultipartFile attachment;
+   /* private MultipartFile attachment;
 
-    private UUID recipeId;
+    private UUID recipeId;*/
 }

@@ -17,5 +17,4 @@ public class IngredientResponseDto {
 
     private Measurement measurement;
 
-    private RecipeResponseDto recipe;
 }

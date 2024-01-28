@@ -73,13 +73,13 @@ public class User implements UserDetails {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinTable(
             name = "user_comment",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id")
     )
     private List<Review> reviews;
-
 /*    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Recipe> recipes;
      @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)

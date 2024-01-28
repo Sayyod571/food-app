@@ -24,7 +24,7 @@ public class AttachmentController {
     @PostMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") UUID userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
-            case    MediaType.IMAGE_GIF_VALUE,
+            case MediaType.IMAGE_GIF_VALUE,
                     MediaType.IMAGE_JPEG_VALUE,
                     MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);

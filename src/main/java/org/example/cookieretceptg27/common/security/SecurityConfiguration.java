@@ -30,9 +30,10 @@ public class SecurityConfiguration
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
-            "/api/***",
+            "/api/files/upload",
             "/auth/***",
             "/auth/otp/*",
+            "/recipe/upload",
             "/recipe/**"
     };
     @Bean
