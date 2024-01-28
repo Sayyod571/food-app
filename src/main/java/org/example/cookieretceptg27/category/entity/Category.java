@@ -13,11 +13,17 @@ import java.util.UUID;
 @Setter
 @Entity
 public class Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     @Column(unique = true,nullable = false)
     private String name;
-    @OneToMany(mappedBy = "categories",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Recipe> recipes;
+
+
+
 }

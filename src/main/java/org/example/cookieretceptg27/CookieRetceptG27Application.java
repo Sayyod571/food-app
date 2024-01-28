@@ -8,10 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class CookieRetceptG27Application implements CommandLineRunner {
+public class CookieRetceptG27Application {
 
     public static void main(String[] args) {
         SpringApplication.run(CookieRetceptG27Application.class, args);
@@ -33,8 +37,4 @@ public class CookieRetceptG27Application implements CommandLineRunner {
         return template;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-
-    }
 }

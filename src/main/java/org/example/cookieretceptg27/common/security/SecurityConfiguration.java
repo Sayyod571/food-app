@@ -22,18 +22,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration
 {
     private final JwtAuthenticationEntryPoint authenticationEntryPoint;
+//    private final CustomOauth2UserService oauth2UserDetails;
     private final String[] WHITE_LIST = {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
-            "/api/***",
+            "/api/files/upload",
             "/auth/***",
             "/auth/otp/*",
-            "/recipe/**",
+            "/recipe/upload",
             "/recipe/**"
-            ,"/category/**"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{
@@ -49,8 +49,10 @@ public class SecurityConfiguration
                         .fullyAuthenticated())
                 .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(entryPoint -> entryPoint.authenticationEntryPoint(authenticationEntryPoint))
-                .oauth2Login(Customizer.withDefaults())
-//                .formLogin(Customizer.withDefaults())
+/*                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
+                        .userInfoEndpoint(userInfoEndpointConfig
+                                -> userInfoEndpointConfig.userService(oauth2UserDetails)))
+                .formLogin(Customizer.withDefaults())*/
                 .build();
     }
 
