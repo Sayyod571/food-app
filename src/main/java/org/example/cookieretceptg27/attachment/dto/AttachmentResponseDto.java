@@ -15,7 +15,6 @@ public class AttachmentResponseDto {
     private UUID id;
 
     private String file_name;
-
     private String fileType;
 
     private String url;
