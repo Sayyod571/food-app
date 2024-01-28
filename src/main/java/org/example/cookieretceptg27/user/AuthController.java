@@ -9,7 +9,6 @@ import org.example.cookieretceptg27.email.dto.OtpVerifyDto;
 import org.example.cookieretceptg27.user.dto.UserCreateDto;
 import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.dto.UserSignInDto;
-import org.example.cookieretceptg27.user.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

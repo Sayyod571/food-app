@@ -1,4 +1,4 @@
-package org.example.cookieretceptg27.user.service;
+package org.example.cookieretceptg27.user;
 
 
 import lombok.RequiredArgsConstructor;

@@ -5,11 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.cookieretceptg27.recipe_attachment.entity.Recipe_attachment;
 import org.example.cookieretceptg27.user.entity.User;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,7 +16,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "'attachment'")
+@EntityListeners(EntityListeners.class)
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,12 +30,13 @@ public class Attachment {
 
     private String fileType;
 
+    @CreationTimestamp
     private LocalDateTime uploadTime;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+/*    @OneToOne
+//    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;*/
 
-    @OneToMany(mappedBy = "attachment_id",fetch = FetchType.EAGER)
-    private List<Recipe_attachment>recipeAttachments;
+/*    @OneToMany(mappedBy = "attachment_id",fetch = FetchType.EAGER)
+    private List<Recipe_attachment>recipeAttachments*/;
 }

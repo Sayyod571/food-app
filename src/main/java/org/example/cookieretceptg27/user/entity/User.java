@@ -1,13 +1,15 @@
 package org.example.cookieretceptg27.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.cookieretceptg27.attachment.entity.Attachment;
-import org.example.cookieretceptg27.following.entity.Followers;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.review.entity.Review;
-import org.example.cookieretceptg27.view.entity.View;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,22 +44,59 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    private List<View> views;
-
-
+    @OneToMany
     @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @JoinTable(name = "following",
+            joinColumns = @JoinColumn(name = "follower_id"),
+            inverseJoinColumns = @JoinColumn(name = "following_id")
+    )
+    private List<User> users;
+
+    /*@ManyToMany
+    @JoinTable(
+            name = "user_attachment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "attachment_id")
+    )*/
+    @OneToOne
+    @JsonProperty("attachment_id")
+    @JoinColumn(name = "attachment_id")
     private Attachment attachment;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinTable(name = "user_recipes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "recipe_id")
+    )
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)  // Updated mappedBy attribute to "user"
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_comment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "review_id")
+    )
     private List<Review> reviews;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.EAGER)
+/*    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Recipe> recipes;
+     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<View> views;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)  // Updated mappedBy attribute to "user"
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Followers> followers;
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_attachment",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "attachment_id")
+    )
+    private List<Attachment> attachments;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

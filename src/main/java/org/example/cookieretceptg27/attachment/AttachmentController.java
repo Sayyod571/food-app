@@ -15,16 +15,18 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("api/files")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class AttachmentController {
     private final AttachmentService service;
 
 
-    @PostMapping( value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") UUID userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
-            case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
+            case    MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
                 AttachmentResponseDto attachmentResponseDto = service.processImageUpload(file, userId);
                 yield ResponseEntity.ok(attachmentResponseDto);
             }
@@ -37,7 +39,7 @@ public class AttachmentController {
 
     }
 
-    @PutMapping( value = "/opload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file")MultipartFile file, @RequestParam("usertId") UUID userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {
@@ -54,7 +56,7 @@ public class AttachmentController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<?> delete(@RequestParam UUID userId){
+    public ResponseEntity<?> delete( @PathVariable String userId){
         service.deleteAttachment(userId);
         return ResponseEntity.noContent().build();
     }

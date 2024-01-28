@@ -89,7 +89,7 @@ public class EmailCodeService {
         String code = String.valueOf(verifyDto.getCode());
 
         EmailCode emailCode = emailCodeRepository.findById( email )
-                                    .orElseThrow( () -> new EmailVerificationException( "the email code already expired" ) );
+                                    .orElseThrow( () -> new EmailVerificationException( "the email not registered with Food Recipe App+" ) );
 
         if( emailCode.getLastSentTime().plusMinutes( 5 ).isBefore( LocalDateTime.now() ) ) {
             throw new EmailVerificationException( "the email code already expired" );
