@@ -9,10 +9,12 @@ import org.example.cookieretceptg27.email.dto.OtpVerifyDto;
 import org.example.cookieretceptg27.email.entity.EmailCode;
 import org.example.cookieretceptg27.email.entity.OTP;
 import org.example.cookieretceptg27.user.UserRepository;
+import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -130,5 +132,26 @@ public class EmailCodeService {
     private int generateCode(){
         Random random = new Random();
         return random.nextInt( 100000, 999999 );
+    }
+
+    public UserResponseDto forgotPasswordVerifyCode(OtpVerifyDto verifyDto) {
+        String email = verifyDto.getEmail();
+        System.out.println("email = " + email);
+        String code = String.valueOf(verifyDto.getCode());
+
+        EmailCode emailCode = emailCodeRepository.findById( email )
+                .orElseThrow( () -> new EmailVerificationException( "the email code already expired" ) );
+
+        if( emailCode.getLastSentTime().plusMinutes( 5 ).isBefore( LocalDateTime.now() ) ) {
+            throw new EmailVerificationException( "the email code already expired" );
+        }
+
+        if( !emailCode.getCode().equals( code ) ) {
+            throw new EmailVerificationException( "Email code doesn't match" );
+        }
+        otpRepository.deleteById(email);
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Email not found"));
+        return mapper.map(user,UserResponseDto.class);
     }
 }

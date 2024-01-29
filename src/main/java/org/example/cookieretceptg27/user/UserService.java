@@ -84,5 +84,32 @@ public class UserService extends GenericCrudService<User, UUID, UserCreateDto, U
 
         return modelMapper.map(userCreateDto, UserResponseDto.class);
     }
+    @Transactional
+    public void forgotPassword(String email) {
+        repository
+                .findUserByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Email not found"));
+        emailCodeService.sendEmail(email);
+    }
+
+
+    public UserResponseDto forgotPasswordNewPassword(ForgotPasswordDto forgotPasswordDto) {
+        String password = forgotPasswordDto.getPassword();
+        String confirmPassword = forgotPasswordDto.getConfirmPassword();
+        String email = forgotPasswordDto.getEmail();
+
+        if (!password.equals(confirmPassword)){
+            throw new PasswordNotMatchException("Password and confirm password not matched!");
+        }
+
+        User user = repository.findUserByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
+
+        repository.save(user);
+
+        return modelMapper.map(user, UserResponseDto.class);
+    }
 
 }

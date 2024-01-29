@@ -33,7 +33,8 @@ public class SecurityConfiguration
             "/auth/***",
             "/auth/otp/*",
             "/recipe/upload",
-            "/recipe/**"
+            "/recipe/**",
+            "/auth/forgot-password/verify-email"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{
