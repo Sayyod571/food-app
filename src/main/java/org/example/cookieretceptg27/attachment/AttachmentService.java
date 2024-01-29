@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.attachment;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cookieretceptg27.attachment.dto.AttachmentResponseDto;
@@ -31,6 +32,7 @@ public class AttachmentService {
     private String uploadDir;
 
     public AttachmentResponseDto processImageUpload(MultipartFile file, UUID userId) throws IOException {
+
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
@@ -38,19 +40,18 @@ public class AttachmentService {
 
 
         try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User with id = %s not found".formatted(userId)));
             File destFile = Paths.get(uploadDir, file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
-
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
 
             Attachment attachment = new Attachment();
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
             attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
-            attachment.setUploadTime(LocalDateTime.now());
-            attachment.setUser(user);
+//            attachment.setUploadTime(LocalDateTime.now());
+//            attachment.setUser(user);
 
             Attachment saved = repository.save(attachment);
 
@@ -67,7 +68,8 @@ public class AttachmentService {
 
 
     public AttachmentResponseDto processImageUpdate(MultipartFile file, UUID userId) {
-
+        return null;
+/*
         if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
@@ -99,7 +101,7 @@ public class AttachmentService {
         } catch (IOException e){
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
-        }
+        }*/
     }
 
     private void deleteFile(String filePath) {
@@ -112,10 +114,15 @@ public class AttachmentService {
     }
 
 
-    public void deleteAttachment(UUID userId) {
-        Attachment attachment = repository.findByUserId(userId).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
-        repository.deleteById(attachment.getId());
-        deleteFile(attachment.getUrl());
+    public void deleteAttachment(String userId) {
+        return;
+       /* UUID userID = UUID.fromString(userId);
+        User user = userRepository.findById(userID).orElseThrow(() -> new EntityNotFoundException("not found"));
+
+        UUID attachmentID = user.getAttachment().getId();
+        Attachment attachment = repository.findById(attachmentID).orElseThrow(() -> new AttachmentNotFound("Could not find attachment"));
+        repository.deleteById(attachmentID);
+        deleteFile(attachment.getUrl());*/
 
     }
 }

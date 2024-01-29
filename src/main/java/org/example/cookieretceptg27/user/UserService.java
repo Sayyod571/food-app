@@ -1,4 +1,4 @@
-package org.example.cookieretceptg27.user.service;
+package org.example.cookieretceptg27.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,6 @@ import org.example.cookieretceptg27.common.service.GenericCrudService;
 import org.example.cookieretceptg27.email.EmailCodeService;
 import org.example.cookieretceptg27.email.OTPRepository;
 import org.example.cookieretceptg27.email.entity.OTP;
-import org.example.cookieretceptg27.user.UserRepository;
 import org.example.cookieretceptg27.user.dto.*;
 import org.example.cookieretceptg27.user.entity.User;
 import org.modelmapper.ModelMapper;

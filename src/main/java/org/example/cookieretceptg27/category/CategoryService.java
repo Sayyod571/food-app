@@ -1,16 +1,14 @@
-package org.example.cookieretceptg27.category.service;
+package org.example.cookieretceptg27.category;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cookieretceptg27.category.dto.CategoryCreateDto;
 import org.example.cookieretceptg27.category.dto.CategoryResponseDto;
 import org.example.cookieretceptg27.category.dto.CategoryUpdateDto;
 import org.example.cookieretceptg27.category.entity.Category;
-import org.example.cookieretceptg27.category.repozitary.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

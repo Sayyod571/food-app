@@ -29,6 +29,7 @@ public class JwtSecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
        try {
+
            String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
            if (StringUtils.isBlank(header) || !header.startsWith("Bearer")){

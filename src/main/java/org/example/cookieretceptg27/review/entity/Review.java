@@ -1,22 +1,40 @@
 package org.example.cookieretceptg27.review.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.ManyToOne;
-import lombok.*;
-import org.example.cookieretceptg27.attachment.entity.Attachment;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
-import org.example.cookieretceptg27.recipe_attachment_key.RecipeAttachmentKey;
-import org.example.cookieretceptg27.user.entity.User;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@EntityListeners(EntityListeners.class)
 public class Review {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    private String comment;
+
+    @ManyToOne
+    @JsonProperty("recipe_id")
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+   /* @Id
     @ManyToOne
     private User user_id;
 
@@ -27,10 +45,8 @@ public class Review {
     @ManyToOne(optional = false)
     private Recipe recipes;
 
-
-
     @ManyToOne(optional = false)
-    private User users;
+    private User users;*/
 
 
 }
