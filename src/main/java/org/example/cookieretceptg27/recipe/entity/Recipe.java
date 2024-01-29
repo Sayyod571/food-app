@@ -7,11 +7,13 @@ import lombok.*;
 import org.example.cookieretceptg27.attachment.entity.Attachment;
 import org.example.cookieretceptg27.category.entity.Category;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
+import org.example.cookieretceptg27.rate.Rate;
 import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.entity.User;
 import org.example.cookieretceptg27.review.entity.Review;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +34,7 @@ public class Recipe {
 
     @Column(nullable = false)
     private Integer duration;
-
+    private LocalDate searchDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -81,6 +83,13 @@ public class Recipe {
     @JoinColumn(name = "attachment_id")
     private Attachment attachment;
 
+    @OneToMany
+    @JsonIgnore
+    @JoinTable(name = "recipe_rate",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "rate_id")
+    )
+    private List<Rate> rates;
     /*
     @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
     private List<Review>reviews;*/
