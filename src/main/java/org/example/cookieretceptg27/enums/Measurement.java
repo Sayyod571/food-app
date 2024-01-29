@@ -1,5 +1,11 @@
 package org.example.cookieretceptg27.enums;
 
 public enum Measurement {
-    TEASPOON
+    KILOGRAM,
+    GRAM,
+    LITER,
+    TEASPOON,
+    TABLESPOON,
+    CUP;
+
 }

@@ -75,7 +75,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinTable(
-            name = "user_comment",
+            name = "user_review",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id")
     )

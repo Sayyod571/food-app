@@ -10,7 +10,9 @@ import org.example.cookieretceptg27.ingredient.entity.Ingredient;
 import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.entity.User;
 import org.example.cookieretceptg27.review.entity.Review;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,16 +21,20 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@EntityListeners(EntityListeners.class)
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID uuid;
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
     private Integer duration;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JsonProperty("author_id")

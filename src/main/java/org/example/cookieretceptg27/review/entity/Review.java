@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@EntityListeners(EntityListeners.class)
 public class Review {
 
     @Id
@@ -28,7 +31,8 @@ public class Review {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
    /* @Id
     @ManyToOne

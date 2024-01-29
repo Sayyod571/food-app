@@ -13,6 +13,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class IngredientCreateDto {
 
+    private UUID id;
+
     private String name;
 
     private Double quantity;

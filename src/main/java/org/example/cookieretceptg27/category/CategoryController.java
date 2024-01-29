@@ -1,10 +1,9 @@
-package org.example.cookieretceptg27.category.controller;
+package org.example.cookieretceptg27.category;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cookieretceptg27.category.dto.CategoryCreateDto;
 import org.example.cookieretceptg27.category.dto.CategoryResponseDto;
 import org.example.cookieretceptg27.category.dto.CategoryUpdateDto;
-import org.example.cookieretceptg27.category.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -30,7 +30,7 @@ public class AuthController {
 
     @GetMapping("/me")
     public ResponseEntity<?>responseEntity(){
-        Optional<User> userByEmail = userRepository.findUserByEmail("bahriddin@gmail.com");
+        Optional<User> userByEmail = userRepository.findUserByEmail("sayitmurodovbakhriddin777@gmail.com");
         return ResponseEntity.ok(userByEmail.get());
     }
     @PostMapping("/sign-up")

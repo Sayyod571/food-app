@@ -4,12 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.cookieretceptg27.enums.Measurement;
-import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class IngredientResponseDto {
+
+    private UUID id;
 
     private String name;
 

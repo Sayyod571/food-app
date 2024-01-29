@@ -3,10 +3,10 @@ package org.example.cookieretceptg27.recipe;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.cookieretceptg27.attachment.AttachmentRepository;
-import org.example.cookieretceptg27.attachment.entity.Attachment;
 import org.example.cookieretceptg27.category.CategoryRepository;
 import org.example.cookieretceptg27.category.dto.CategoryResponseDto;
 import org.example.cookieretceptg27.category.entity.Category;
+import org.example.cookieretceptg27.common.rsql.SpecificationBuilder;
 import org.example.cookieretceptg27.ingredient.IngredientRepository;
 import org.example.cookieretceptg27.ingredient.dto.IngredientCreateDto;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
@@ -21,9 +21,11 @@ import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -33,7 +35,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
-    private final RecipeRepository recipeRepository;
+    private final  RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final IngredientRepository ingredientRepository;
@@ -100,13 +102,27 @@ public class RecipeService {
         UserResponseDto userResponseDto = mapper.map(user, UserResponseDto.class);
 
         return new RecipeResponseDto(
+                saved.getId(),
                 recipeCreateDto.getName(),
                 recipeCreateDto.getDuration(),
+                savedRecipe.getCreatedAt(),
                 responseDto,
                 userResponseDto,
-                ingredients,
-                steps
+                ingredients1,
+                stepList1
 
         );
+    }
+
+
+    public Page<RecipeResponseDto> search(Pageable pageable, String predicate) {
+        Specification<Recipe> specification = SpecificationBuilder.build( predicate );
+        if( specification == null )
+        {
+            return recipeRepository.findAll( pageable )
+                    .map( entity -> mapper.map(entity, RecipeResponseDto.class));
+        }
+        return recipeRepository.findAll( specification, pageable )
+                .map( entity -> mapper.map(entity, RecipeResponseDto.class));
     }
 }

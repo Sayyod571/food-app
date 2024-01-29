@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.step.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,6 +30,7 @@ public class Step {
     private Integer orderNumber;
 
     @ManyToOne
+    @JsonIgnore
     @JsonProperty("recipe_id")
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;

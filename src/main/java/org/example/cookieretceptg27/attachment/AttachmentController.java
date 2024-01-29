@@ -20,7 +20,6 @@ import java.util.UUID;
 public class AttachmentController {
     private final AttachmentService service;
 
-
     @PostMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") UUID userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {

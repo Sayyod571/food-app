@@ -32,8 +32,8 @@ public class AttachmentService {
     private String uploadDir;
 
     public AttachmentResponseDto processImageUpload(MultipartFile file, UUID userId) throws IOException {
-        return null;
-        /*if (file.isEmpty()) {
+
+        if (file.isEmpty()) {
             log.error("Empty file uploaded");
             throw new IllegalArgumentException("Empty file uploaded");
         }
@@ -51,11 +51,11 @@ public class AttachmentService {
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
             attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
 //            attachment.setUploadTime(LocalDateTime.now());
-            attachment.setUser(user);
+//            attachment.setUser(user);
 
             Attachment saved = repository.save(attachment);
 
-//            user.setAttachment(saved);
+            user.setAttachment(saved);
 
             userRepository.save(user);
 
@@ -63,7 +63,7 @@ public class AttachmentService {
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);
-        }*/
+        }
     }
 
 
