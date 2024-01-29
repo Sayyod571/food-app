@@ -26,13 +26,15 @@ public class Review {
 
     private String comment;
 
+    @CreationTimestamp
+    private LocalDateTime created;
+
     @ManyToOne
     @JsonProperty("recipe_id")
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+
 
    /* @Id
     @ManyToOne
