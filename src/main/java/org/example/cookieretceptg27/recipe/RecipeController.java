@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
-import org.springframework.data.domain.Page;
+import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/recipe")
@@ -40,9 +42,9 @@ public class RecipeController {
                 .body(recipeResponseDto);
     }
     @GetMapping()
-    public ResponseEntity<Page<RecipeResponseDto>> getUsers(Pageable pageable, @RequestParam String predicate )
+    public ResponseEntity<List<SearchResponseDto>> getSearch(Pageable pageable, @RequestParam(required = false) String predicate )
     {
-        Page<RecipeResponseDto> responseDto = recipeService.search( pageable, predicate );
+        List<SearchResponseDto> responseDto = recipeService.search( pageable, predicate );
         return ResponseEntity.ok( responseDto );
     }
 }

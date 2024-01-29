@@ -10,8 +10,10 @@ import org.example.cookieretceptg27.common.rsql.SpecificationBuilder;
 import org.example.cookieretceptg27.ingredient.IngredientRepository;
 import org.example.cookieretceptg27.ingredient.dto.IngredientCreateDto;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
+import org.example.cookieretceptg27.rate.Rate;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.step.StepRepository;
 import org.example.cookieretceptg27.step.dto.StepCreateDto;
@@ -27,9 +29,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -115,14 +116,43 @@ public class RecipeService {
     }
 
 
-    public Page<RecipeResponseDto> search(Pageable pageable, String predicate) {
-        Specification<Recipe> specification = SpecificationBuilder.build( predicate );
-        if( specification == null )
-        {
-            return recipeRepository.findAll( pageable )
-                    .map( entity -> mapper.map(entity, RecipeResponseDto.class));
+    public List<SearchResponseDto> search(Pageable pageable, String predicate) {
+        List<SearchResponseDto> responseDtoList = new ArrayList<>();
+        if (predicate == null) {
+            List<Recipe> allRecipe = recipeRepository.findAll();
+            for (Recipe recipe : allRecipe) {
+                if (recipe.getSearchDate() != null) {
+                    SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
+                    responseDtoList.add(searchResponseDto);
+                }
+            }
+        } else {
+            predicate = predicate.toLowerCase();
+            Specification<Recipe> specification = SpecificationBuilder.build(predicate);
+            Page<Recipe> recipes = recipeRepository.findAll(specification, pageable);
+            for (Recipe recipe : recipes) {
+                SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
+                responseDtoList.add(searchResponseDto);
+            }
         }
-        return recipeRepository.findAll( specification, pageable )
-                .map( entity -> mapper.map(entity, RecipeResponseDto.class));
+        return responseDtoList;
+    }
+
+    private static SearchResponseDto getSearchResponseDto(Recipe recipe) {
+        double sum = 0;
+        List<Rate> rates = recipe.getRates();
+        for (Rate rate : rates) {
+            sum += rate.getRate();
+        }
+        SearchResponseDto searchResponseDto = new SearchResponseDto();
+        if (sum != 0 && !rates.isEmpty()) {
+            searchResponseDto.setStars(sum / rates.size());
+        }
+        String name = recipe.getName();
+        String trueName = name.substring(0, 1).toUpperCase() + name.substring(1);
+        searchResponseDto.setName(trueName);
+        searchResponseDto.setRecipeAttachments(recipe.getAttachment());
+        searchResponseDto.setUserName(recipe.getUser().getName());
+        return searchResponseDto;
     }
 }

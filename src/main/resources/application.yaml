@@ -4,9 +4,9 @@ server:
     dir: D:\Java tutorials\Real Project\src\main\resources\img
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/food_app_new
-    username: postgres
-    password: 123
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: tornado
+    password: tornado
   mail:
     host: smtp.gmail.com
     port: 587
