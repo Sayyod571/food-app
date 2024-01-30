@@ -270,4 +270,11 @@ public class RecipeService {
                 stars
         );
     }
+
+    public List<RecipeResponseDto> getAll() {
+        return recipeRepository.findAll()
+                .stream().
+                map(recipe -> mapper.map(recipe,RecipeResponseDto.class)).toList();
+    }
+
 }

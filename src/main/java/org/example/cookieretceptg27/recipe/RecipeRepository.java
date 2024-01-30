@@ -12,4 +12,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID>,
         JpaSpecificationExecutor<Recipe> {
 
 
+    Recipe findByLink(String link);
 }

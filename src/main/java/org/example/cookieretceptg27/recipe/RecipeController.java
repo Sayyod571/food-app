@@ -56,6 +56,12 @@ public class RecipeController {
                 .status(HttpStatus.OK)
                 .body(recipeResponseDto);
     }
+    @GetMapping
+    public ResponseEntity<List<RecipeResponseDto>>getAll()
+    {
+        List<RecipeResponseDto>responseDtos=recipeService.getAll();
+        return ResponseEntity.ok(responseDtos);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponseDto>getById(@PathVariable("id")UUID id)
     {
