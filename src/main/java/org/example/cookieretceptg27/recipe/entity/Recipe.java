@@ -11,6 +11,7 @@ import org.example.cookieretceptg27.rate.Rate;
 import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.entity.User;
 import org.example.cookieretceptg27.review.entity.Review;
+import org.example.cookieretceptg27.view.entity.View;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
@@ -82,6 +83,9 @@ public class Recipe {
     @JsonProperty("attachment_id")
     @JoinColumn(name = "attachment_id")
     private Attachment attachment;
+    @OneToMany(mappedBy = "recipes")
+    @JsonIgnore
+    private List<View> view;
 
     @OneToMany
     @JsonIgnore

@@ -21,6 +21,5 @@ public class ReviewResponseDto {
 
     private String message;
 
-    private Integer commentCount;
 
 }

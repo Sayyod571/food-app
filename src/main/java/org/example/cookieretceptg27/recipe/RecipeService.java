@@ -11,9 +11,9 @@ import org.example.cookieretceptg27.ingredient.IngredientRepository;
 import org.example.cookieretceptg27.ingredient.dto.IngredientCreateDto;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
 import org.example.cookieretceptg27.rate.Rate;
+import org.example.cookieretceptg27.rate.RateRepozitary;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
-import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.step.StepRepository;
 import org.example.cookieretceptg27.step.dto.StepCreateDto;
@@ -21,20 +21,27 @@ import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.UserRepository;
 import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.entity.User;
+import org.example.cookieretceptg27.view.ViewRepository;
+import org.example.cookieretceptg27.view.entity.View;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RecipeService {
     private final  RecipeRepository recipeRepository;
     private final UserRepository userRepository;
@@ -43,6 +50,8 @@ public class RecipeService {
     private final AttachmentRepository attachmentRepository;
     private final StepRepository stepRepository;
     private final ModelMapper mapper;
+    private final ViewRepository viewRepository;
+    private final RateRepozitary rateRepozitary;
 
     @Value("${server.upload.dir}")
     private String uploadDir;
@@ -111,49 +120,93 @@ public class RecipeService {
                 responseDto,
                 userResponseDto,
                 ingredients1,
-                stepList1
+                stepList1,
+                0,
+                0
 
         );
     }
 
 
-    public List<SearchResponseDto> search(Pageable pageable, String predicate) {
-        List<SearchResponseDto> responseDtoList = new ArrayList<>();
-        if (predicate == null) {
-            List<Recipe> allRecipe = recipeRepository.findAll();
-            for (Recipe recipe : allRecipe) {
-                if (recipe.getSearchDate() != null) {
-                    SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
-                    responseDtoList.add(searchResponseDto);
-                }
-            }
-        } else {
-            predicate = predicate.toLowerCase();
-            Specification<Recipe> specification = SpecificationBuilder.build(predicate);
-            Page<Recipe> recipes = recipeRepository.findAll(specification, pageable);
-            for (Recipe recipe : recipes) {
-                SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
-                responseDtoList.add(searchResponseDto);
-            }
+    public Page<RecipeResponseDto> search(Pageable pageable, String predicate) {
+        Specification<Recipe> specification = SpecificationBuilder.build( predicate );
+        if( specification == null )
+        {
+            return recipeRepository.findAll( pageable )
+                    .map( entity -> mapper.map(entity, RecipeResponseDto.class));
         }
-        return responseDtoList;
+        return recipeRepository.findAll( specification, pageable )
+                .map( entity -> mapper.map(entity, RecipeResponseDto.class));
     }
 
-    private static SearchResponseDto getSearchResponseDto(Recipe recipe) {
-        double sum = 0;
-        List<Rate> rates = recipe.getRates();
-        for (Rate rate : rates) {
-            sum += rate.getRate();
+    public RecipeResponseDto findById(UUID id) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User byEmail = userRepository.findByEmail(name);
+        Recipe recipe = recipeRepository.findById(id).get();
+
+        if(viewsUser(byEmail, viewRepository.findByRecipes(recipe)))
+        {
+            RecipeResponseDto map = mapper.map(recipe, RecipeResponseDto.class);
+            map.setReviews_size(recipe.getView().size());
+            return map;
         }
-        SearchResponseDto searchResponseDto = new SearchResponseDto();
-        if (sum != 0 && !rates.isEmpty()) {
-            searchResponseDto.setStars(sum / rates.size());
+        else {
+            View view=new View(UUID.randomUUID(),List.of(byEmail.getId()),recipe);
+            View save = viewRepository.save(view);
+            recipe.getView().add(save);
+            RecipeResponseDto map = new RecipeResponseDto();
+            mapper.map(recipe,map);
+            map.setReviews_size(recipe.getView().size());
+            recipeRepository.save(recipe);
+return map;
+
         }
-        String name = recipe.getName();
-        String trueName = name.substring(0, 1).toUpperCase() + name.substring(1);
-        searchResponseDto.setName(trueName);
-        searchResponseDto.setRecipeAttachments(recipe.getAttachment());
-        searchResponseDto.setUserName(recipe.getUser().getName());
-        return searchResponseDto;
+
+    }
+
+    private boolean viewsUser(User byEmail, List<View> byRecipes) {
+        for (View byRecipe : byRecipes) {
+            for (UUID uuid : byRecipe.getUserId()) {
+                if (uuid.equals(byEmail.getId()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;}
+
+
+    public RecipeResponseDto createStars(double stars, UUID id) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        User byEmail = userRepository.findByEmail(name);
+        Recipe recipe = recipeRepository.findById(id).get();
+        List<Rate> byRecipe = rateRepozitary.findByRecipe(recipe);
+       double number_stars=starsCalculate(byRecipe);
+
+        return null;
+    }
+
+    private double starsCalculate(List<Rate> byRecipe) {
+        int sum=0;
+        for (Rate rate : byRecipe) {
+            sum+=rate.getRate();
+        }
+        return (double) sum /byRecipe.size();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

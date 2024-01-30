@@ -1,7 +1,6 @@
-package org.example.cookieretceptg27.rate;
+package org.example.cookieretceptg27.saved.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.user.entity.User;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,15 +16,15 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-public class Rate {
+public class Saved {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @Column(columnDefinition = "integer CHECK (rate >= 1 AND rate <= 5)")
-    private Integer rate;
-
     @ManyToOne
-    @JsonIgnore
+    @JsonManagedReference
+    private User users;
+     @JsonManagedReference
+    @ManyToOne
     private Recipe recipe;
+
 }

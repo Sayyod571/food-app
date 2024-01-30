@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.category.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
@@ -28,6 +29,7 @@ public class Category {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Recipe> recipes;
 
 

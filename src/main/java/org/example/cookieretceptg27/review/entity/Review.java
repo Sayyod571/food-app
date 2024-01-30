@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.review.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
+import org.example.cookieretceptg27.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -30,13 +32,14 @@ public class Review {
 
     @CreationTimestamp
     private LocalDateTime created;
-
+      @ManyToOne
+      @JsonIgnore
+      private User users;
 
     @ManyToOne
     @JsonProperty("recipe_id")
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-
 
 
 

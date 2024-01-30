@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, UUID>, JpaSpecificationExecutor<Recipe> {
+public interface RecipeRepository extends JpaRepository<Recipe, UUID>,
+        JpaSpecificationExecutor<Recipe> {
 
 
 }

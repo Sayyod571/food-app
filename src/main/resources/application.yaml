@@ -4,7 +4,7 @@ server:
     dir: C:\LAST VERSION\src\main\
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: jdbc:postgresql://localhost:5433/postgres
     username: postgres
     password: 123
   mail:
