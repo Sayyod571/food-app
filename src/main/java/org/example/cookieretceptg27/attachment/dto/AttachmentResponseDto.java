@@ -13,13 +13,8 @@ import java.util.UUID;
 @Data
 public class AttachmentResponseDto {
     private UUID id;
-
     private String file_name;
     private String fileType;
-
     private String url;
-
     private LocalDateTime uploadTime;
-
-    private User user;
 }

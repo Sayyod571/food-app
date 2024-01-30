@@ -18,6 +18,5 @@ public class AttachmentCreateDto {
 
     private String url;
 
-    private LocalDateTime uploadTime;
 
 }
