@@ -11,9 +11,10 @@ import org.example.cookieretceptg27.ingredient.IngredientRepository;
 import org.example.cookieretceptg27.ingredient.dto.IngredientCreateDto;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
 import org.example.cookieretceptg27.rate.Rate;
-import org.example.cookieretceptg27.rate.RateRepozitary;
+import org.example.cookieretceptg27.rate.RateRepository;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.step.StepRepository;
 import org.example.cookieretceptg27.step.dto.StepCreateDto;
@@ -33,17 +34,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class RecipeService {
-    private final  RecipeRepository recipeRepository;
+    private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final IngredientRepository ingredientRepository;
@@ -51,13 +50,14 @@ public class RecipeService {
     private final StepRepository stepRepository;
     private final ModelMapper mapper;
     private final ViewRepository viewRepository;
-    private final RateRepozitary rateRepozitary;
+    private final RateRepository rateRepository;
 
     @Value("${server.upload.dir}")
     private String uploadDir;
 
     /**
-     *  kod toliq emas,  clean code qilish kere
+     * kod toliq emas,  clean code qilish kere
+     *
      * @param recipeCreateDto
      * @return
      */
@@ -106,7 +106,6 @@ public class RecipeService {
         savedRecipe.setSteps(stepList1);
 
 
-
         Recipe saved = recipeRepository.save(savedRecipe);
 
         CategoryResponseDto responseDto = mapper.map(category, CategoryResponseDto.class);
@@ -126,40 +125,25 @@ public class RecipeService {
 
         );
     }
-
-
-    public Page<RecipeResponseDto> search(Pageable pageable, String predicate) {
-        Specification<Recipe> specification = SpecificationBuilder.build( predicate );
-        if( specification == null )
-        {
-            return recipeRepository.findAll( pageable )
-                    .map( entity -> mapper.map(entity, RecipeResponseDto.class));
-        }
-        return recipeRepository.findAll( specification, pageable )
-                .map( entity -> mapper.map(entity, RecipeResponseDto.class));
-    }
-
     public RecipeResponseDto findById(UUID id) {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         User byEmail = userRepository.findByEmail(name);
         Recipe recipe = recipeRepository.findById(id).get();
 
-        if(viewsUser(byEmail, viewRepository.findByRecipes(recipe)))
-        {
+        if (viewsUser(byEmail, viewRepository.findByRecipes(recipe))) {
             RecipeResponseDto map = mapper.map(recipe, RecipeResponseDto.class);
             map.setReviews_size(recipe.getView().size());
             return map;
-        }
-        else {
-            View view=new View(UUID.randomUUID(),List.of(byEmail.getId()),recipe);
+        } else {
+            View view = new View(UUID.randomUUID(), List.of(byEmail.getId()), recipe);
             View save = viewRepository.save(view);
             recipe.getView().add(save);
             RecipeResponseDto map = new RecipeResponseDto();
-            mapper.map(recipe,map);
+            mapper.map(recipe, map);
             map.setReviews_size(recipe.getView().size());
             recipeRepository.save(recipe);
-return map;
+            return map;
 
         }
 
@@ -168,32 +152,91 @@ return map;
     private boolean viewsUser(User byEmail, List<View> byRecipes) {
         for (View byRecipe : byRecipes) {
             for (UUID uuid : byRecipe.getUserId()) {
-                if (uuid.equals(byEmail.getId()))
-                {
+                if (uuid.equals(byEmail.getId())) {
                     return true;
                 }
             }
         }
-        return false;}
-
-
-    public RecipeResponseDto createStars(double stars, UUID id) {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
-        User byEmail = userRepository.findByEmail(name);
-        Recipe recipe = recipeRepository.findById(id).get();
-        List<Rate> byRecipe = rateRepozitary.findByRecipe(recipe);
-       double number_stars=starsCalculate(byRecipe);
-
-        return null;
+        return false;
     }
 
-    private double starsCalculate(List<Rate> byRecipe) {
-        int sum=0;
-        for (Rate rate : byRecipe) {
-            sum+=rate.getRate();
+    public List<SearchResponseDto> search(Pageable pageable, String predicate) {
+        List<SearchResponseDto> responseDtoList = new ArrayList<>();
+        if (predicate == null) {
+            List<Recipe> allRecipe = recipeRepository.findAll();
+            for (Recipe recipe : allRecipe) {
+                if (recipe.getSearchDate() != null) {
+                    SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
+                    responseDtoList.add(searchResponseDto);
+                }
+            }
+        } else {
+            predicate = predicate.toLowerCase();
+            Specification<Recipe> specification = SpecificationBuilder.build(predicate);
+            Page<Recipe> recipes = recipeRepository.findAll(specification, pageable);
+            for (Recipe recipe : recipes) {
+                SearchResponseDto searchResponseDto = getSearchResponseDto(recipe);
+                responseDtoList.add(searchResponseDto);
+            }
         }
-        return (double) sum /byRecipe.size();
+        return responseDtoList;
+    }
+
+    private static SearchResponseDto getSearchResponseDto(Recipe recipe) {
+        double sum = 0;
+        double stars = 0;
+        List<Rate> rates = recipe.getRates();
+        for (Rate rate : rates) {
+            sum += rate.getRate();
+        }
+        if (sum != 0) {
+            stars = sum / rates.size();
+        }
+        SearchResponseDto searchResponseDto = new SearchResponseDto();
+        String name = recipe.getName();
+        String responseName = name.substring(0, 1).toUpperCase() + name.substring(1);
+        searchResponseDto.setId(recipe.getId());
+        searchResponseDto.setName(responseName);
+        searchResponseDto.setStars(stars);
+        searchResponseDto.setRecipeAttachments(recipe.getAttachment());
+        searchResponseDto.setUserName(recipe.getUser().getName());
+        return searchResponseDto;
+    }
+
+    public RecipeResponseDto rateCreate(UUID recipeId, double rates,  UUID userId) {
+        /*Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+
+        User user = userRepository.findUserByEmail(name).get();*/
+        User user = userRepository.findById(userId).get();
+        Rate rate = new Rate(UUID.randomUUID(), rates, user);
+        rateRepository.save(rate);
+        Recipe recipe = recipeRepository.findById(recipeId).get();
+        List<Rate> rateList = recipe.getRates();
+        rateList.add(rate);
+        recipeRepository.save(recipe);
+        double sum = 0;
+        double stars = 0;
+        for (Rate star : rateList) {
+            sum += star.getRate();
+        }
+        if (sum != 0) {
+            stars = sum / rateList.size();
+        }
+        CategoryResponseDto responseDto = mapper.map(recipe.getCategory(), CategoryResponseDto.class);
+        UserResponseDto userResponseDto = mapper.map(recipe.getUser(), UserResponseDto.class);
+        return new RecipeResponseDto(
+                recipe.getId(),
+                recipe.getName(),
+                recipe.getDuration(),
+                recipe.getCreatedAt(),
+                responseDto,
+                userResponseDto,
+                recipe.getIngredients(),
+                recipe.getSteps(),
+                recipe.getReviews().size(),
+                stars
+        );
     }
 }
 
