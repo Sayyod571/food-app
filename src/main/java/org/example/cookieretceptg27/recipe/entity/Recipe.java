@@ -44,6 +44,7 @@ public class Recipe {
     @ManyToOne
     @JsonProperty("author_id")
     @JoinColumn( name = "author_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne
@@ -62,6 +63,7 @@ public class Recipe {
     private List<Ingredient> ingredients;
 
     @OneToMany
+    @JsonIgnore
     @JoinTable(name = "recipe_reviews",
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "review_id")
@@ -91,7 +93,4 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "rate_id")
     )
     private List<Rate> rates;
-
-
-
 }

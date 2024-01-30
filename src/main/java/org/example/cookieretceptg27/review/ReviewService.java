@@ -94,10 +94,10 @@ public class ReviewService {
         for (Review review : byRecipe1) {
             responseDto.setUserResponseReview(mapper.map(review.getUsers(), UserResponseReview.class));
             responseDto.setReview_id(review.getId());
-responseDto.setMessage(review.getComment());
-responseDto.setCreated(review.getCreated());
-reviewResponseDtos.add(responseDto);
-responseDto=new ReviewResponseDto();
+            responseDto.setMessage(review.getComment());
+            responseDto.setCreated(review.getCreated());
+            reviewResponseDtos.add(responseDto);
+             responseDto=new ReviewResponseDto();
         }
         reviewMessageResponseDto.setReviewResponseDtos(reviewResponseDtos);
         reviewMessageResponseDto.setComments_number(size);
