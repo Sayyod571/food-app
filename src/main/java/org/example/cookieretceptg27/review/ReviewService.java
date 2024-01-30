@@ -27,10 +27,12 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final RecipeRepository recipeRepository;
 
+    private static int NUM = 0;
 
     public ReviewResponseDto comment(ReviewCreateDto createDto) {
 
         UUID recipeId = createDto.getRecipeId();
+
 
         Review review = mapper.map(createDto, Review.class);
         Review savedReview = repository.save(review);
@@ -64,46 +66,20 @@ public class ReviewService {
 
             responseDto.setMessage(comment);
 
+            int i = ++NUM;
+            responseDto.setCommentCount(i);
+            NUM = i;
+
+
         }
 
         return responseDto;
     }
+
 }
 
 
 
-
-
-/*
- @GetMapping("/review/users")
-    public String getUsers(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Foydalanuvchi ma'lumotlarini olish
-            String username = authentication.getName();
-            // Yoki foydalanuvchi obyektini olish
-            // User user = (User) authentication.getPrincipal();
-
-            // ... qolgan logika ...
-            return "Foydalanuvchi: " + username;
-        } else {
-            // Foydalanuvchi avtorizatsiyadan o'tmagan
-            return "Foydalanuvchi avtorizatsiyadan o'tmagan";
-        }
-    }
-
-}*/
-
-
-// if (authentication != null && authentication.isAuthenticated()) {
-//Object principal = authentication.getPrincipal();
-//            if (principal instanceof UserDetails) {
-//String username = ((UserDetails) principal).getUsername();
-//UUID userId = UUID.fromString(username);
-//                responseDto.setUser_id(userId);
-//            }
-//                    }
 
 
 
