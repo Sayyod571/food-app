@@ -52,12 +52,6 @@ public class User implements UserDetails {
     )
     private List<User> users;
 
-    /*@ManyToMany
-    @JoinTable(
-            name = "user_attachment",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "attachment_id")
-    )*/
     @OneToOne
     @JsonProperty("attachment_id")
     @JoinColumn(name = "attachment_id")
@@ -72,31 +66,9 @@ public class User implements UserDetails {
     private List<Recipe> recipes;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "users",fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinTable(
-            name = "user_review",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "review_id")
-    )
     private List<Review> reviews;
-/*    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Recipe> recipes;
-     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<View> views;
-
-    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)  // Updated mappedBy attribute to "user"
-    private List<Review> reviews;
-
-    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    private List<Followers> followers;
-    @ManyToMany
-    @JoinTable(
-            name = "recipe_attachment",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "attachment_id")
-    )
-    private List<Attachment> attachments;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
