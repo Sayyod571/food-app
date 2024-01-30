@@ -107,7 +107,7 @@ public class UserService extends GenericCrudService<User, UUID, UserCreateDto, U
         repository
                 .findUserByEmail(email)
                 .orElseThrow(() -> new BadCredentialsException("Email not found"));
-        emailCodeService.sendEmail(email);
+        emailService.sendEmail(email);
     }
 
 

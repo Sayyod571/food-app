@@ -1,17 +1,13 @@
 package org.example.cookieretceptg27;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.oauth2.client.OAuth2AuthorizationContext;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
+
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -24,7 +20,9 @@ public class CookieRetceptG27Application {
     @Bean
     JedisConnectionFactory jedisConnectionFactory()
     {
-        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration( "localhost", 6379 );
+        RedisStandaloneConfiguration localhost = new RedisStandaloneConfiguration( "redis-18402.c55.eu-central-1-1.ec2.cloud.redislabs.com", 18402 );
+        localhost.setUsername("default");
+        localhost.setPassword("id4weIPgfqUB8COBcPbz2SNdi6XFSfnO");
         return new JedisConnectionFactory( localhost );
     }
 

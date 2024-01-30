@@ -1,12 +1,12 @@
 server:
   port: 8080
   upload:
-    dir: D:\Java tutorials\Real Project\src\main\resources\img
+    dir: C:\LAST VERSION\src\main\
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/food_app_new
-    username: postgres
-    password: 123
+    url: jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:6543/postgres
+    username: postgres.yongauiwpvrfkqrljqtm
+    password: 7ttZj3JsDJ5Eny3n
   mail:
     host: smtp.gmail.com
     port: 587
@@ -47,6 +47,7 @@ spring:
       ddl-auto: update
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+
 security:
     jwt:
       key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
