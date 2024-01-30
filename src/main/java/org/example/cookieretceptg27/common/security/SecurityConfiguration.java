@@ -31,7 +31,12 @@ public class SecurityConfiguration
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
-            "/auth/***"
+            "/api/files/upload",
+            "/auth/***",
+            "/auth/otp/*",
+            "/recipe/upload",
+            "/recipe/**",
+            "/auth/forgot-password/verify-email"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{

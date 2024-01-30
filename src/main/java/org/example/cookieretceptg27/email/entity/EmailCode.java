@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;
 
+//HagkjwYxww1kHI5v
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -25,7 +25,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "'user'")
+@Table(name = "`user`")
 @EntityListeners(EntityListeners.class)
 public class User implements UserDetails {
     @Id

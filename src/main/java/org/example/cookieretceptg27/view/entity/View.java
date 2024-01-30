@@ -17,7 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name ="'view'")
+@Table(name ="`view`")
 public class View {
        @Id
        @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +28,5 @@ public class View {
 
        @ManyToOne
        @JsonIgnore
-      private Recipe recipes;
-
-
+       private Recipe recipes;
 }
