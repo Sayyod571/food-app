@@ -45,14 +45,14 @@ public class AttachmentService {
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User with id = %s not found".formatted(userId)));
-            File destFile = Paths.get(uploadDir+"\\resources\\img\\userImg", file.getOriginalFilename()).toFile();
+            File destFile = Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
             AttachmentCreateDto attachment = new AttachmentCreateDto();
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir+"\\resources\\img\\userImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename())));
 
             Attachment map = mapper.map(attachment, Attachment.class);
 
@@ -77,7 +77,7 @@ public class AttachmentService {
         }
 
         try{
-            File destFile = Paths.get(uploadDir+"\\resources\\img\\UserImg", file.getOriginalFilename()).toFile();
+            File destFile = Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
@@ -91,8 +91,7 @@ public class AttachmentService {
             attachment.setId(user.getAttachment().getId());
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir+"\\resources\\img\\UserImg", file.getOriginalFilename())));
-            attachment.setUploadTime(LocalDateTime.now());
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename())));
 
             Attachment saved = repository.save(attachment);
 
@@ -123,14 +122,14 @@ public class AttachmentService {
             Recipe recipe = recipeRepository.findById(recipeId)
                     .orElseThrow(() -> new EntityNotFoundException("Recipe with id = %s not found".formatted(recipeId)));
 
-            File destFile = Paths.get(uploadDir+"\\resources\\img\\recipeImg", file.getOriginalFilename()).toFile();
+            File destFile = Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
             AttachmentCreateDto attachment = new AttachmentCreateDto();
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir+"\\resources\\img\\recipeImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename())));
 
             Attachment saved = repository.save(mapper.map(attachment, Attachment.class));
 
@@ -140,6 +139,41 @@ public class AttachmentService {
             recipeRepository.save(recipe);
 
             return mapper.map(attachment, AttachmentResponseDto.class);
+        } catch (IOException e) {
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file", e);
+        }
+    }
+
+    public AttachmentResponseDto recipeImageUpdate(MultipartFile file, UUID recipeId) {
+        if (file.isEmpty()){
+            log.error("Empty file uploaded");
+            throw new IllegalArgumentException("Empty file uploaded");
+        }
+
+        try{
+            File destFile = Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
+            Recipe recipe = recipeRepository.findById(recipeId)
+                    .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+            Attachment attachment = recipe.getAttachment();
+            String url = attachment.getUrl();
+            deleteFile(url);
+
+            attachment.setId(recipe.getAttachment().getId());
+            attachment.setFile_name(file.getOriginalFilename());
+            attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename())));
+            attachment.setUploadTime(LocalDateTime.now());
+
+            Attachment saved = repository.save(attachment);
+
+            return mapper.map(saved, AttachmentResponseDto.class);
+
+
         } catch (IOException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file", e);

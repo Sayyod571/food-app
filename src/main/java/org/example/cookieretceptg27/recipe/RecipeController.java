@@ -47,6 +47,9 @@ public class RecipeController {
                 .status(HttpStatus.CREATED)
                 .body(recipeResponseDto);
     }
+
+
+    @GetMapping()
     @PutMapping("/{id}")
     public ResponseEntity<RecipeResponseDto> update(@PathVariable UUID id,
                                                     @RequestBody RecipeUpdateDto recipeUpdateDto) {
@@ -56,7 +59,7 @@ public class RecipeController {
                 .status(HttpStatus.OK)
                 .body(recipeResponseDto);
     }
-    @GetMapping
+    @GetMapping("/recipes")
     public ResponseEntity<List<RecipeResponseDto>>getAll()
     {
         List<RecipeResponseDto>responseDtos=recipeService.getAll();
