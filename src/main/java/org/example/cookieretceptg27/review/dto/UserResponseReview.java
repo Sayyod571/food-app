@@ -15,11 +15,8 @@ public class UserResponseReview {
 
     private UUID id;
 
-    @NotBlank(message = "auth.user.name.required")
     private String name;
 
-    @Email
-    @NotBlank(message = "auth.user.email.required")
     private String email;
 
 }

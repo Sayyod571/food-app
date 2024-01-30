@@ -26,8 +26,11 @@ public class Review {
 
     private String comment;
 
+
+
     @CreationTimestamp
     private LocalDateTime created;
+
 
     @ManyToOne
     @JsonProperty("recipe_id")
@@ -36,7 +39,20 @@ public class Review {
 
 
 
-   /* @Id
+
+
+}
+
+
+
+
+
+
+
+
+
+   /*
+   @Id
     @ManyToOne
     private User user_id;
 
@@ -48,7 +64,5 @@ public class Review {
     private Recipe recipes;
 
     @ManyToOne(optional = false)
-    private User users;*/
-
-
-}
+    private User users;
+    */
