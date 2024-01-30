@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
+import org.example.cookieretceptg27.recipe.entity.RecipeRate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -41,23 +44,22 @@ public class RecipeController {
                 .status(HttpStatus.CREATED)
                 .body(recipeResponseDto);
     }
-    @PostMapping("/{id}")
-    public ResponseEntity<RecipeResponseDto>rateCreate(@RequestParam double stars,@PathVariable("id")UUID id)
-    {
-        RecipeResponseDto recipeResponseDto=recipeService.createStars(stars,id);
-        return ResponseEntity.ok(recipeResponseDto);
-    }
-    @GetMapping()
-    public ResponseEntity<Page<RecipeResponseDto>> getUsers(Pageable pageable, @RequestParam String predicate )
-    {
-        Page<RecipeResponseDto> responseDto = recipeService.search( pageable, predicate );
-        return ResponseEntity.ok( responseDto );
-    }
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponseDto>getById(@PathVariable("id")UUID id)
     {
         RecipeResponseDto recipeResponseDto=recipeService.findById(id);
         return ResponseEntity.ok(recipeResponseDto);
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<SearchResponseDto>> getSearch(Pageable pageable, @RequestParam(required = false) String predicate )
+    {
+        List<SearchResponseDto> responseDto = recipeService.search( pageable, predicate );
+        return ResponseEntity.ok( responseDto );
+    }
+    @PostMapping("/rate")
+    public ResponseEntity<RecipeResponseDto> createRate(@RequestBody RecipeRate recipeRate, UUID userId){
+        RecipeResponseDto responseDto = recipeService.rateCreate(recipeRate.getRecipeId(), recipeRate.getStars(),  userId);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }
 

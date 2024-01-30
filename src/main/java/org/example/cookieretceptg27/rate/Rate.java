@@ -23,10 +23,10 @@ public class Rate {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(columnDefinition = "integer CHECK (rate >= 1 AND rate <= 5)")
-    private Integer rate;
+    private double rate;
 
     @ManyToOne
-    @JsonIgnore
-    private Recipe recipe;
+    @JsonProperty("user_id")
+    @JoinColumn(name = "user_id")
+    private User user;
 }
