@@ -38,14 +38,13 @@ public class AttachmentController {
 
     }
 
-
-    @PostMapping( value = "/recipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AttachmentResponseDto> recipeImg(@RequestParam("file")MultipartFile file, @RequestParam("recipeId") UUID recipeId) throws IOException {
+    @PutMapping( value = "/recipe/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> recipeUpdateImg(@RequestParam("file")MultipartFile file, @RequestParam("recipeId") UUID recipeId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE,
                     MediaType.IMAGE_JPEG_VALUE,
                     MediaType.IMAGE_PNG_VALUE -> {
-                AttachmentResponseDto attachmentResponseDto = service.recipeImageUpload(file, recipeId);
+                AttachmentResponseDto attachmentResponseDto = service.recipeImageUpdate(file, recipeId);
                 yield ResponseEntity.ok(attachmentResponseDto);
             }
             default -> {
@@ -56,6 +55,8 @@ public class AttachmentController {
         };
 
     }
+
+
 
 
     @PutMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
