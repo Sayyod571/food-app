@@ -20,7 +20,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.StreamSupport;
 
 
 @Service
@@ -89,7 +88,7 @@ public class EmailCodeService {
         String code = String.valueOf(verifyDto.getCode());
 
         EmailCode emailCode = emailCodeRepository.findById( email )
-                                    .orElseThrow( () -> new EmailVerificationException( "the email not registered with Food Recipe App+" ) );
+                                    .orElseThrow( () -> new EmailVerificationException( "the email code already expired" ) );
 
         if( emailCode.getLastSentTime().plusMinutes( 5 ).isBefore( LocalDateTime.now() ) ) {
             throw new EmailVerificationException( "the email code already expired" );
@@ -99,12 +98,6 @@ public class EmailCodeService {
             throw new EmailVerificationException( "Email code doesn't match" );
         }
 
-       /* Iterable<OTP> all = otpRepository.findAll();
-        OTP otp = StreamSupport.stream(all.spliterator(), false).filter(otpUser -> otpUser.getEmail().equals(email)).findFirst().orElseThrow(
-                () -> new EntityNotFoundException(
-                        String.format("User with email = %s not found", email)
-                )
-        );*/
         OTP otpUser = otpRepository.findById( email )
                                     .orElseThrow(
                                       () -> new EntityNotFoundException(

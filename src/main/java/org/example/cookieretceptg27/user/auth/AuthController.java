@@ -1,4 +1,4 @@
-package org.example.cookieretceptg27.user;
+package org.example.cookieretceptg27.user.auth;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.cookieretceptg27.common.jwt.JwtService;
 import org.example.cookieretceptg27.email.EmailCodeService;
 import org.example.cookieretceptg27.email.dto.OtpVerifyDto;
+import org.example.cookieretceptg27.user.UserRepository;
+import org.example.cookieretceptg27.user.UserService;
 import org.example.cookieretceptg27.user.dto.UserCreateDto;
 import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.dto.UserSignInDto;
@@ -26,13 +28,7 @@ public class AuthController {
     private final UserService userService;
     private final EmailCodeService emailService;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
 
-    @GetMapping("/me")
-    public ResponseEntity<?>responseEntity(){
-        Optional<User> userByEmail = userRepository.findUserByEmail("sayitmurodovbakhriddin777@gmail.com");
-        return ResponseEntity.ok(userByEmail.get());
-    }
     @PostMapping("/sign-up")
     public ResponseEntity<UserResponseDto> signUp(@RequestBody @Valid UserCreateDto userCreateDto ) {
         UserResponseDto userResponseDto = userService.signUp(userCreateDto);
@@ -65,11 +61,5 @@ public class AuthController {
                 .status( HttpStatus.OK )
                 .body( "Successfully send. Please, check your email!" );
     }
-
-
-
-
-
-
 
 }

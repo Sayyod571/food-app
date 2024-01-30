@@ -35,7 +35,9 @@ public class Recipe {
 
     @Column(nullable = false)
     private Integer duration;
+
     private LocalDate searchDate;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -45,6 +47,7 @@ public class Recipe {
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @JsonProperty("category_id")
     @JoinColumn(name = "category_id")
     private Category category;
@@ -73,12 +76,6 @@ public class Recipe {
     )
     private List<Step>steps;
 
-    /*@ManyToMany
-    @JsonIgnore
-    @JoinTable(name = "recipe_attachment",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "attachment_id")
-    )*/
     @OneToOne
     @JsonProperty("attachment_id")
     @JoinColumn(name = "attachment_id")
@@ -94,17 +91,7 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "rate_id")
     )
     private List<Rate> rates;
-    /*
-    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
-    private List<Review>reviews;*/
 
-  /*  @OneToMany(mappedBy = "recipe",fetch = FetchType.EAGER)
-    private List<RecipeIngredients>recipeIngredients;*/
-/*    @OneToMany(mappedBy = "recipes",fetch = FetchType.EAGER)
-    private List<Recipe_attachment>recipeAttachments;*/
 
-   /* @ManyToOne(optional = false)
-    private User users;*/
-//    private LocalDateTime searchDate;
 
 }
