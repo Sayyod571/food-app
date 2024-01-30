@@ -12,13 +12,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IngredientCreateDto {
+
+
+
     private String name;
 
     private Double quantity;
 
     private Measurement measurement;
 
-   /* private MultipartFile attachment;
-
-    private UUID recipeId;*/
 }

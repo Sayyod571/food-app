@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
+import org.example.cookieretceptg27.user.entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
