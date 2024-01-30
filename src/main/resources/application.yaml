@@ -1,10 +1,10 @@
 server:
   port: 8080
   upload:
-    dir: C:\LAST VERSION\src\main\
+    dir: D:\Java tutorials\Real Project\src\main\resources\img
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5432/food_app_new
     username: postgres
     password: 123
   mail:
@@ -26,8 +26,8 @@ spring:
       client:
         registration:
           google:
-            client-id: your hchfvghfxth
-            client-secret: your client secret
+            client-id: 170942101931-lqs16gkcu0uo5ksknn3tb6iuhhg1c7nc.apps.googleusercontent.com
+            client-secret: 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
             scope:
               - email
               - profile

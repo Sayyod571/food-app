@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.dto.RecipeUpdateDto;
 import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.example.cookieretceptg27.recipe.entity.RecipeRate;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,6 +47,15 @@ public class RecipeController {
                 .status(HttpStatus.CREATED)
                 .body(recipeResponseDto);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<RecipeResponseDto> update(@PathVariable UUID id,
+                                                    @RequestBody RecipeUpdateDto recipeUpdateDto) {
+        RecipeResponseDto recipeResponseDto = recipeService.update(id, recipeUpdateDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(recipeResponseDto);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<RecipeResponseDto>getById(@PathVariable("id")UUID id)
     {
@@ -57,8 +69,8 @@ public class RecipeController {
         return ResponseEntity.ok( responseDto );
     }
     @PostMapping("/rate")
-    public ResponseEntity<RecipeResponseDto> createRate(@RequestBody RecipeRate recipeRate, UUID userId){
-        RecipeResponseDto responseDto = recipeService.rateCreate(recipeRate.getRecipeId(), recipeRate.getStars(),  userId);
+    public ResponseEntity<RecipeResponseDto> createRate(@RequestBody RecipeRate recipeRate){
+        RecipeResponseDto responseDto = recipeService.rateCreate(recipeRate.getRecipeId(), recipeRate.getStars());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

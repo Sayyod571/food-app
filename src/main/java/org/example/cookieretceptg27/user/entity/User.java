@@ -41,6 +41,8 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    private String bio;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -52,6 +54,12 @@ public class User implements UserDetails {
     )
     private List<User> users;
 
+    /*@ManyToMany
+    @JoinTable(
+            name = "user_attachment",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "attachment_id")
+    )*/
     @OneToOne
     @JsonProperty("attachment_id")
     @JoinColumn(name = "attachment_id")
@@ -69,6 +77,23 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "users",fetch = FetchType.LAZY)
     @JsonIgnore
     private List<Review> reviews;
+/*    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Recipe> recipes;
+     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<View> views;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)  // Updated mappedBy attribute to "user"
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private List<Followers> followers;
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_attachment",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "attachment_id")
+    )
+    private List<Attachment> attachments;*/
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

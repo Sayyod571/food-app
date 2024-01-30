@@ -14,6 +14,7 @@ import org.example.cookieretceptg27.rate.Rate;
 import org.example.cookieretceptg27.rate.RateRepository;
 import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.dto.RecipeUpdateDto;
 import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.step.StepRepository;
@@ -40,13 +41,11 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final IngredientRepository ingredientRepository;
-    private final AttachmentRepository attachmentRepository;
     private final StepRepository stepRepository;
     private final ModelMapper mapper;
     private final ViewRepository viewRepository;
@@ -107,7 +106,8 @@ public class RecipeService {
 
 
         Recipe saved = recipeRepository.save(savedRecipe);
-
+        category.getRecipes().add(saved);
+        categoryRepository.save(category);
         CategoryResponseDto responseDto = mapper.map(category, CategoryResponseDto.class);
         UserResponseDto userResponseDto = mapper.map(user, UserResponseDto.class);
 
@@ -125,6 +125,38 @@ public class RecipeService {
 
         );
     }
+    public RecipeResponseDto update(UUID recipeId, RecipeUpdateDto recipeUpdateDto) {
+        Recipe recipe = recipeRepository
+                .findById(recipeId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("recipe with id=%s not found".formatted(recipeId))
+                );
+
+        UUID updateDtoCategoryId = recipeUpdateDto.getCategoryId();
+        Category originalCategory = recipe.getCategory();
+
+        if (!originalCategory.getId().equals(updateDtoCategoryId)){
+            Category category = categoryRepository
+                    .findById(updateDtoCategoryId)
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("updating category id=%s not found".formatted(updateDtoCategoryId))
+                    );
+            // TODO: 30/01/2024
+            /**
+             * not completed
+             */
+            recipe.setCategory(category);
+        }
+
+        List<IngredientCreateDto> ingredients = recipeUpdateDto.getIngredients();
+        List<StepCreateDto> steps = recipeUpdateDto.getSteps();
+
+        mapper.map(recipeUpdateDto,recipe);
+        Recipe saved = recipeRepository.save(recipe);
+        return mapper.map(saved, RecipeResponseDto.class);
+    }
+
+
     public RecipeResponseDto findById(UUID id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
@@ -203,12 +235,12 @@ public class RecipeService {
         return searchResponseDto;
     }
 
-    public RecipeResponseDto rateCreate(UUID recipeId, double rates,  UUID userId) {
-        /*Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+    public RecipeResponseDto rateCreate(UUID recipeId, double rates) {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
 
-        User user = userRepository.findUserByEmail(name).get();*/
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findUserByEmail(name).get();
+
         Rate rate = new Rate(UUID.randomUUID(), rates, user);
         rateRepository.save(rate);
         Recipe recipe = recipeRepository.findById(recipeId).get();
@@ -239,17 +271,3 @@ public class RecipeService {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
