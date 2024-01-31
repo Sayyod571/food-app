@@ -35,6 +35,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -79,6 +80,7 @@ public class RecipeService {
         recipe.setDuration(recipeCreateDto.getDuration());
         recipe.setUser(user);
         recipe.setCategory(category);
+        recipe.setCreatedAt(LocalDateTime.now());
         Recipe savedRecipe = recipeRepository.save(recipe);
 
 
@@ -108,6 +110,8 @@ public class RecipeService {
         Recipe saved = recipeRepository.save(savedRecipe);
         category.getRecipes().add(saved);
         categoryRepository.save(category);
+        user.getRecipes().add(saved);
+        userRepository.save(user);
         CategoryResponseDto responseDto = mapper.map(category, CategoryResponseDto.class);
         UserResponseDto userResponseDto = mapper.map(user, UserResponseDto.class);
 

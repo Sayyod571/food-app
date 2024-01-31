@@ -2,6 +2,7 @@ package org.example.cookieretceptg27.user;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cookieretceptg27.user.dto.UserBioDto;
+import org.example.cookieretceptg27.user.dto.UserProfileResponseDto;
 import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,14 @@ public class UserController {
 
     @GetMapping("/user/profile/{id}")
     public ResponseEntity<?> profile(@PathVariable UUID id){
-        // TODO: 30/01/2024
-        return null;
+        UserProfileResponseDto responseDto = userService.getUserProfile(id);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+    @PostMapping("/follow/{followingId}")
+    public ResponseEntity<?> follow(@PathVariable UUID followingId){
+        userService.follow(followingId);
 
+        return ResponseEntity.ok().body("Successfully followed");
+    }
 
 }

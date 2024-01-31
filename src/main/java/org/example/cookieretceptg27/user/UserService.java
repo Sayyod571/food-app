@@ -14,10 +14,14 @@ import org.example.cookieretceptg27.email.EmailCodeRepository;
 import org.example.cookieretceptg27.email.EmailCodeService;
 import org.example.cookieretceptg27.email.OTPRepository;
 import org.example.cookieretceptg27.email.entity.OTP;
+import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
+import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.user.dto.*;
 import org.example.cookieretceptg27.user.entity.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -158,5 +162,40 @@ public class UserService extends GenericCrudService<User, UUID, UserCreateDto, U
         user.setBio(bioDto.getBio());
         User savedUse = repository.save(user);
         return mapper.toResponseDto(savedUse);
+    }
+
+    public UserProfileResponseDto getUserProfile(UUID id) {
+        User user = repository
+                .findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("user with id = %s not found".formatted(id))
+                );
+        List<Recipe> recipes = user.getRecipes();
+
+        List<RecipeResponseDto> list = recipes.stream().map(recipe -> modelMapper.map(recipe, RecipeResponseDto.class)).toList();
+        List<User> users = user.getUsers();
+        return UserProfileResponseDto.builder()
+                .bio(user.getBio())
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .recipeCount(recipes.size())
+                .followers(users.size())
+                .following(0)
+                .recipeResponseDto(list)
+                .build();
+    }
+
+    public void follow(UUID followingId) {
+        User user = repository.findById(followingId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("user with id = %s not found".formatted(followingId))
+                );
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+
+        User followingUser = repository.findUserByEmail(name).orElseThrow(() ->
+                new EntityNotFoundException("There is no such email user "));
+        user.getUsers().add(followingUser);
     }
 }
