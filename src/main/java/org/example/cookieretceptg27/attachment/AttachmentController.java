@@ -56,6 +56,24 @@ public class AttachmentController {
 
     }
 
+    @PutMapping( value = "/recipe/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AttachmentResponseDto> recipeUploadImg(@RequestParam("file")MultipartFile file, @RequestParam("recipeId") UUID recipeId) throws IOException {
+        return switch (Objects.requireNonNull(file.getContentType())) {
+            case MediaType.IMAGE_GIF_VALUE,
+                    MediaType.IMAGE_JPEG_VALUE,
+                    MediaType.IMAGE_PNG_VALUE -> {
+                AttachmentResponseDto attachmentResponseDto = service.recipeImageUpload(file, recipeId);
+                yield ResponseEntity.ok(attachmentResponseDto);
+            }
+            default -> {
+                log.error("Unsupported filetype: {}", file.getContentType());
+                throw new UnsupportedMediaTypeStatusException(
+                        String.format("Unsupported filetype: %s", file.getContentType()));
+            }
+        };
+
+    }
+
 
 
 

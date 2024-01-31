@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -35,6 +36,8 @@ public class AttachmentService {
     @Value("${server.upload.dir}")
     private String uploadDir;
 
+
+
     public AttachmentResponseDto processImageUpload(MultipartFile file, UUID userId) throws IOException {
 
         if (file.isEmpty()) {
@@ -45,14 +48,41 @@ public class AttachmentService {
         try {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("User with id = %s not found".formatted(userId)));
-            File destFile = Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename()).toFile();
+
+
+            Path directory = Paths.get(uploadDir+"\\resources\\img\\userImg");
+
+            if(!Files.exists(directory)){
+                Path directories = Files.createDirectories(directory);
+
+                File destFile = Paths.get(String.valueOf(directories), file.getOriginalFilename()).toFile();
+                file.transferTo(destFile);
+                log.info("Uploaded: {}", destFile);
+
+                AttachmentCreateDto attachment = new AttachmentCreateDto();
+                attachment.setFile_name(file.getOriginalFilename());
+                attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+                attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
+
+                Attachment map = mapper.map(attachment, Attachment.class);
+
+                Attachment saved = repository.save(map);
+
+                user.setAttachment(saved);
+
+                userRepository.save(user);
+
+                return mapper.map(saved, AttachmentResponseDto.class);
+            }
+
+            File destFile = Paths.get(String.valueOf(directory), file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
             AttachmentCreateDto attachment = new AttachmentCreateDto();
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
 
             Attachment map = mapper.map(attachment, Attachment.class);
 
@@ -76,22 +106,25 @@ public class AttachmentService {
             throw new IllegalArgumentException("Empty file uploaded");
         }
 
-        try{
-            File destFile = Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename()).toFile();
-            file.transferTo(destFile);
-            log.info("Uploaded: {}", destFile);
+        Path directory = Paths.get(uploadDir+"\\resources\\img\\userImg");
 
+        try{
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new RuntimeException("User not found"));
+
 
             Attachment attachment = user.getAttachment();
             String url = attachment.getUrl();
             deleteFile(url);
 
+            File destFile = Paths.get(String.valueOf(directory), file.getOriginalFilename()).toFile();
+            file.transferTo(destFile);
+            log.info("Uploaded: {}", destFile);
+
             attachment.setId(user.getAttachment().getId());
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "userImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
 
             Attachment saved = repository.save(attachment);
 
@@ -122,14 +155,38 @@ public class AttachmentService {
             Recipe recipe = recipeRepository.findById(recipeId)
                     .orElseThrow(() -> new EntityNotFoundException("Recipe with id = %s not found".formatted(recipeId)));
 
-            File destFile = Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename()).toFile();
+            Path directory = Paths.get(uploadDir+"\\resources\\img\\recipeImg");
+
+            if(!Files.exists(directory)){
+                Path directories = Files.createDirectories(directory);
+
+                File destFile = Paths.get(String.valueOf(directories), file.getOriginalFilename()).toFile();
+                file.transferTo(destFile);
+                log.info("Uploaded: {}", destFile);
+
+                AttachmentCreateDto attachment = new AttachmentCreateDto();
+                attachment.setFile_name(file.getOriginalFilename());
+                attachment.setFileType(Objects.requireNonNull(file.getContentType()));
+                attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
+
+                Attachment saved = repository.save(mapper.map(attachment, Attachment.class));
+
+
+                recipe.setAttachment(saved);
+
+                recipeRepository.save(recipe);
+
+                return mapper.map(attachment, AttachmentResponseDto.class);
+            }
+
+            File destFile = Paths.get(String.valueOf(directory), file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
             AttachmentCreateDto attachment = new AttachmentCreateDto();
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
 
             Attachment saved = repository.save(mapper.map(attachment, Attachment.class));
 
@@ -151,8 +208,11 @@ public class AttachmentService {
             throw new IllegalArgumentException("Empty file uploaded");
         }
 
+        Path directory = Paths.get(uploadDir+"\\resources\\img\\recipeImg");
+
+
         try{
-            File destFile = Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename()).toFile();
+            File destFile = Paths.get(String.valueOf(directory), file.getOriginalFilename()).toFile();
             file.transferTo(destFile);
             log.info("Uploaded: {}", destFile);
 
@@ -166,7 +226,7 @@ public class AttachmentService {
             attachment.setId(recipe.getAttachment().getId());
             attachment.setFile_name(file.getOriginalFilename());
             attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-            attachment.setUrl(String.valueOf(Paths.get(uploadDir, "resources", "img", "recipeImg", file.getOriginalFilename())));
+            attachment.setUrl(String.valueOf(Paths.get(String.valueOf(directory), file.getOriginalFilename())));
             attachment.setUploadTime(LocalDateTime.now());
 
             Attachment saved = repository.save(attachment);
