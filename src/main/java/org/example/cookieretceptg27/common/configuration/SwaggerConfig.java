@@ -38,7 +38,7 @@ public class SwaggerConfig {
                 .servers(List.of(
                         new Server()
 //                                .url("http://16.171.172.208:8080/")
-                                .url("https://food-app-production-5c74.up.railway.app")
+                                .url("https://food-app-production-5c74.up.railway.app/")
                                 .description("Production")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
