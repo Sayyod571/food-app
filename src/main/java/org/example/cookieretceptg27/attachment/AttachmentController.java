@@ -56,7 +56,7 @@ public class AttachmentController {
 
     }
 
-    @PutMapping( value = "/recipe/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping( value = "/recipe/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> recipeUploadImg(@RequestParam("file")MultipartFile file, @RequestParam("recipeId") UUID recipeId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE,
@@ -77,7 +77,7 @@ public class AttachmentController {
 
 
 
-    @PutMapping( value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping( value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AttachmentResponseDto> updateFile(@RequestParam("file")MultipartFile file, @RequestParam("userId") UUID userId) throws IOException {
         return switch (Objects.requireNonNull(file.getContentType())) {
             case MediaType.IMAGE_GIF_VALUE, MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE -> {

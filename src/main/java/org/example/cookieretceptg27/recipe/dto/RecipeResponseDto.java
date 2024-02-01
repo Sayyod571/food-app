@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.recipe.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class RecipeResponseDto {
 
     private CategoryResponseDto category;
 
+    @JsonProperty("recipe_author")
     private UserResponseDto user;
 
 
@@ -39,6 +41,7 @@ public class RecipeResponseDto {
     private List<Step> steps;
 
     private int reviews_size;
+
     private double stars;
 
 }

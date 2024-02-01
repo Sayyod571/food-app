@@ -2,7 +2,6 @@ package org.example.cookieretceptg27.recipe;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.cookieretceptg27.attachment.AttachmentRepository;
 import org.example.cookieretceptg27.category.CategoryRepository;
 import org.example.cookieretceptg27.category.dto.CategoryResponseDto;
 import org.example.cookieretceptg27.category.entity.Category;
@@ -23,6 +22,7 @@ import org.example.cookieretceptg27.step.entity.Step;
 import org.example.cookieretceptg27.user.UserRepository;
 import org.example.cookieretceptg27.user.dto.UserResponseDto;
 import org.example.cookieretceptg27.user.entity.User;
+import org.example.cookieretceptg27.util.SecurityContextHolderService;
 import org.example.cookieretceptg27.view.ViewRepository;
 import org.example.cookieretceptg27.view.entity.View;
 import org.modelmapper.ModelMapper;
@@ -30,10 +30,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static org.example.cookieretceptg27.util.SecurityContextHolderService.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,43 +54,27 @@ public class RecipeService {
     private final ViewRepository viewRepository;
     private final RateRepository rateRepository;
 
-    @Value("${server.upload.dir}")
+    @Value("${service.upload.dir}")
     private String uploadDir;
 
-    /**
-     * kod toliq emas,  clean code qilish kere
-     *
-     * @param recipeCreateDto
-     * @return
-     */
     @Transactional
     public RecipeResponseDto create(RecipeCreateDto recipeCreateDto) {
 
         UUID categoryId = recipeCreateDto.getCategoryId();
-        UUID userId = recipeCreateDto.getUserId();
+        User user = getUser();
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new EntityNotFoundException("user with id = %s not found".formatted(userId))
-                );
+
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(
                         () -> new EntityNotFoundException("category with id = %s not found".formatted(categoryId))
                 );
         Recipe recipe = new Recipe();
-        recipe.setName(recipeCreateDto.getName());
+        recipe.setName(recipeCreateDto.getName().toLowerCase());
         recipe.setDuration(recipeCreateDto.getDuration());
         recipe.setUser(user);
         recipe.setCategory(category);
         recipe.setCreatedAt(LocalDateTime.now());
         Recipe savedRecipe = recipeRepository.save(recipe);
-
-
-/*        Attachment attachment = new Attachment();
-        attachment.setFile_name(file.getOriginalFilename());
-        attachment.setFileType(Objects.requireNonNull(file.getContentType()));
-        attachment.setUrl(String.valueOf(Paths.get(uploadDir, file.getOriginalFilename())));
-        Attachment savedRecipeAttachment = attachmentRepository.save(attachment);*/
 
         List<IngredientCreateDto> ingredients = recipeCreateDto.getIngredients();
         List<StepCreateDto> steps = recipeCreateDto.getSteps();
@@ -145,21 +131,13 @@ public class RecipeService {
                     .orElseThrow(
                             () -> new EntityNotFoundException("updating category id=%s not found".formatted(updateDtoCategoryId))
                     );
-            // TODO: 30/01/2024
-            /**
-             * not completed
-             */
             recipe.setCategory(category);
         }
-
-        List<IngredientCreateDto> ingredients = recipeUpdateDto.getIngredients();
-        List<StepCreateDto> steps = recipeUpdateDto.getSteps();
 
         mapper.map(recipeUpdateDto,recipe);
         Recipe saved = recipeRepository.save(recipe);
         return mapper.map(saved, RecipeResponseDto.class);
     }
-
 
     public RecipeResponseDto findById(UUID id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -281,4 +259,21 @@ public class RecipeService {
                 map(recipe -> mapper.map(recipe,RecipeResponseDto.class)).toList();
     }
 
+    public User getUser(){
+        String email = getUserFromSecurityContextHolder();
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("user not found"));
+    }
+
+    public void delete(UUID id) {
+        String email = getUserFromSecurityContextHolder();
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("recipe author not found"));
+
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("recipe with id = %s not found".formatted(id)));
+
+        if (!recipe.getUser().getId().equals(user.getId())){
+            throw new AccessDeniedException("You cannot delete this recipe. Only recipe author have access to delete");
+        }
+
+        recipeRepository.deleteById(recipe.getId());
+    }
 }

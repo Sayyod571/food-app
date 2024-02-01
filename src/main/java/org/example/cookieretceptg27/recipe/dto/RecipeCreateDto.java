@@ -25,8 +25,6 @@ public class RecipeCreateDto {
 
     private UUID categoryId;
 
-    private UUID userId;
-
     private List<IngredientCreateDto> ingredients;
 
     private List<StepCreateDto>steps;

@@ -64,14 +64,21 @@ public class EmailCodeService {
                 throw new EmailVerificationException( "You already tried 5 times. Please try after 24 hour" );
             }
 
-            if( !emailCode.getLastSentTime().plusMinutes(2).isBefore( LocalDateTime.now() ) )
+            if( !emailCode.getLastSentTime().plusMinutes(1).isBefore( LocalDateTime.now() ) )
             {
                 Duration between = Duration.between( emailCode.getLastSentTime(), LocalDateTime.now() );
-                long diff = 120 - between.getSeconds();
+                long diff = 60 - between.getSeconds();
                 throw new EmailVerificationException( "Please try after %d seconds".formatted( diff ) );
             }
 
             int code = generateCode();
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("FOOD RECIPE APP");
+            message.setText(text.formatted(email,code));
+            mailSender.send(message);
+
 
             emailCode.setCode( String.valueOf( code ) );
             emailCode.setSentCount( emailCode.getSentCount() + 1 );

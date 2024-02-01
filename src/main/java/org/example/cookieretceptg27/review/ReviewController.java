@@ -22,8 +22,8 @@ public class ReviewController {
         ReviewResponseDto comment = service.comment(createDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(comment);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<ReviewMessageResponseDto>getByComment(@PathVariable("id")UUID id)
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<ReviewMessageResponseDto>getByComment(@PathVariable("recipeId")UUID id)
     {
         ReviewMessageResponseDto reviewMessageResponseDto=service.getByComment(id);
         return ResponseEntity.ok(reviewMessageResponseDto);

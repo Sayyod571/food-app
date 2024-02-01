@@ -8,5 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class UserUpdateDto  {
-    // TODO: 23/01/2024  
+    private String name;
+    private String bio;
 }

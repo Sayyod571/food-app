@@ -1,6 +1,7 @@
 package org.example.cookieretceptg27.user.dto;
 
 import lombok.*;
+import org.example.cookieretceptg27.attachment.dto.AttachmentResponseDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public class UserProfileResponseDto {
     private Integer followers;
 
     private Integer following;
+
+    private AttachmentResponseDto attachment;
 }

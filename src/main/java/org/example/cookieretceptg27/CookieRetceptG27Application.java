@@ -1,6 +1,8 @@
 package org.example.cookieretceptg27;
 
 import lombok.RequiredArgsConstructor;
+import org.example.cookieretceptg27.util.MockDataGenerator;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,8 +13,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootApplication
 @RequiredArgsConstructor
-public class CookieRetceptG27Application {
+public class CookieRetceptG27Application implements CommandLineRunner {
 
+    private final MockDataGenerator mockDataGenerator;
     public static void main(String[] args) {
         SpringApplication.run(CookieRetceptG27Application.class, args);
     }
@@ -35,4 +38,8 @@ public class CookieRetceptG27Application {
         return template;
     }
 
+    @Override
+    public void run(String... args) throws Exception {
+        mockDataGenerator.generateMockRecipes(5);
+    }
 }

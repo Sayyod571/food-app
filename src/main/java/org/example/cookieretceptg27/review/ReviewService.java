@@ -84,7 +84,7 @@ public class ReviewService {
     }
 
     public ReviewMessageResponseDto getByComment(UUID id) {
-        Recipe recipe = recipeRepository.findById(id).get();
+        Recipe recipe = recipeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("recipe with id=%s not found".formatted(id)));
         List<Review> byRecipe1 = repository.findByRecipe(recipe);
         List<Saved> byRecipe = savedRepository.findByRecipe(recipe);
         int size = recipe.getReviews().size();

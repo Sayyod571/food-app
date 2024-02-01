@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -123,9 +126,43 @@ public class CustomExceptionHandler {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
     }
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<CustomErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.FORBIDDEN)
+                        .build());
+    }
 
     @ExceptionHandler(PasswordNotMatchException.class)
     public ResponseEntity<CustomErrorResponse> handlePasswordNotMatchException(PasswordNotMatchException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CustomErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(CustomErrorResponse.builder()
+                        .message(e.getMessage())
+                        .timestamp(LocalDateTime.now())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<CustomErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.error(e.getMessage(), e);
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

@@ -36,7 +36,8 @@ public class SecurityConfiguration
             "/auth/otp/*",
             "/recipe/upload",
             "/recipe/**",
-            "/auth/forgot-password/verify-email"
+            "/auth/forgot-password/verify-email",
+            "/home/ubuntu/img"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security, JwtSecurityFilter jwtSecurityFilter) throws Exception{

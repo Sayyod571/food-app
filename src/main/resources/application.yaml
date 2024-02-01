@@ -1,12 +1,14 @@
 server:
   port: 8080
+service:
   upload:
-    dir: C:\LAST VERSION\src\main\
+    dir: src/main/resources/img
 spring:
   datasource:
-    url: jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:6543/postgres
-    username: postgres.yongauiwpvrfkqrljqtm
-    password: 7ttZj3JsDJ5Eny3n
+    url: jdbc:postgresql://dpg-cmt3u8i1hbls73cncvvg-a.frankfurt-postgres.render.com:5432/food_hao5
+    username: food_hao5_user
+    password: y7s2Svf4onPaM5bcRHGO4NDyXuTPEImQ
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -49,5 +51,5 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
 
 security:
-    jwt:
-      key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw
+  jwt:
+    key: WC+qbHYl2B0o02421L+2UayDp2LtczY/3cSkAyErfTjmcEOXNtyjXq0un/SdY4cw

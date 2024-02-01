@@ -6,9 +6,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
-import io.swagger.v3.oas.models.security.*;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
-import jdk.javadoc.doclet.Doclet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,61 +17,37 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-        @Bean
-        public OpenAPI springOpenAPI() {
-            return new OpenAPI()
-                    .info(new Info()
-                            .title("Spring 6 Swagger 2 Annotation Example")
-                            .description("Spring 6 Swagger Simple Application")
-                            .version("${api.version}")
-                            .contact(new Contact()
-                                    .name("Sayitmurodov Bahriddin")
-                                    .email("sayitmurodovbakhrddin777@gmail.com")
-                                    .url("https://github.com/bahriddinsayitmurodov"))
-                            .license(new License()
-                                    .name("Apache 2.0")
-                                    .url("http://springdoc.org"))
-                            .termsOfService("http://swagger.io/terms/"))
-                    .externalDocs(new ExternalDocumentation()
-                            .description("SpringShop Wiki Documentation")
-                            .url("https://springshop.wiki.github.org/docs"))
-                    .servers(List.of(
-                            new Server()
-                                    .url("http://localhost:8080")
-                                    .description("Production")
-                    ))
-                    .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                    .components(new Components()
-                            .addSecuritySchemes("bearerAuth",new SecurityScheme()
-                                    .name("bearerAuth")
-                                    .type(SecurityScheme.Type.HTTP)
-                                    .scheme("bearer")
-                                    .bearerFormat("JWT"))
-                            .addSecuritySchemes("googleAuth", new SecurityScheme()
-                            .name("googleAuth")
-                            .type(SecurityScheme.Type.OAUTH2)
-                            .flows(new OAuthFlows()
-                                    .authorizationCode(new OAuthFlow()
-//                                            .tokenUrl("https://accounts.google.com/o/oauth2/token")
-                                            .authorizationUrl("http://localhost:8080/login/oauth2/code/google")
-//                                            .authorizationUrl("https://accounts.google.com/o/oauth2/auth")
-                                            .scopes(new Scopes().addString("openid", "email"))
-                                    )
-                            )
-
-                    )
-                    .addSecuritySchemes("githubAuth", new SecurityScheme()
-                            .name("githubAuth")
-                            .type(SecurityScheme.Type.OAUTH2)
-                            .flows(new OAuthFlows()
-                                    .authorizationCode(new OAuthFlow()
-                                            .tokenUrl("https://github.com/login/oauth/access_token")
-                                            .authorizationUrl("https://github.com/login/oauth/authorize")
-                                            .scopes(new Scopes().addString("read:user", "user:email"))
-                                    )
-                            )
-                    )
-                    );
-        }
+    @Bean
+    public OpenAPI springOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Spring 6 Swagger 2 Annotation Example")
+                        .description("Spring 6 Swagger Simple Application")
+                        .version("${api.version}")
+                        .contact(new Contact()
+                                .name("Sayitmurodov Bahriddin")
+                                .email("sayitmurodovbakhrddin777@gmail.com")
+                                .url("https://github.com/bahriddinsayitmurodov"))
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("http://springdoc.org"))
+                        .termsOfService("http://swagger.io/terms/"))
+                .externalDocs(new ExternalDocumentation()
+                        .description("SpringShop Wiki Documentation")
+                        .url("https://springshop.wiki.github.org/docs"))
+                .servers(List.of(
+                        new Server()
+//                                .url("http://16.171.172.208:8080/")
+                                .url("http://localhost:8080/")
+                                .description("Production")
+                ))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth", new SecurityScheme()
+                                .name("bearerAuth")
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
+    }
 
 }

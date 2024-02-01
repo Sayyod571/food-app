@@ -29,29 +29,13 @@ public class RecipeController {
     @PostMapping
     public ResponseEntity<RecipeResponseDto> create(@RequestBody RecipeCreateDto recipeCreateDto) {
         RecipeResponseDto recipeResponseDto = recipeService.create(recipeCreateDto);
-        /*return switch (Objects.requireNonNull(file.getContentType())) {
-            case    MediaType.IMAGE_GIF_VALUE,
-                    MediaType.IMAGE_JPEG_VALUE,
-                    MediaType.IMAGE_PNG_VALUE -> {
-                RecipeResponseDto recipeResponseDto = recipeService.create(recipeCreateDto, file);
-                yield ResponseEntity.ok(recipeResponseDto);
-            }
-            default -> {
-                log.error("Unsupported filetype: {}", file.getContentType());
-                throw new UnsupportedMediaTypeStatusException(
-                        String.format("Unsupported filetype: %s", file.getContentType()));
-            }
-        };*/
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(recipeResponseDto);
     }
 
-
-    @GetMapping()
-    @PutMapping("/{id}")
-    public ResponseEntity<RecipeResponseDto> update(@PathVariable UUID id,
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<RecipeResponseDto> update(@PathVariable(name = "recipeId") UUID id,
                                                     @RequestBody RecipeUpdateDto recipeUpdateDto) {
         RecipeResponseDto recipeResponseDto = recipeService.update(id, recipeUpdateDto);
 
@@ -59,7 +43,16 @@ public class RecipeController {
                 .status(HttpStatus.OK)
                 .body(recipeResponseDto);
     }
-    @GetMapping("/recipes")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable UUID id) {
+        recipeService.delete(id);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @GetMapping("/all")
     public ResponseEntity<List<RecipeResponseDto>>getAll()
     {
         List<RecipeResponseDto>responseDtos=recipeService.getAll();
@@ -71,12 +64,14 @@ public class RecipeController {
         RecipeResponseDto recipeResponseDto=recipeService.findById(id);
         return ResponseEntity.ok(recipeResponseDto);
     }
+
     @GetMapping("/search")
     public ResponseEntity<List<SearchResponseDto>> getSearch(Pageable pageable, @RequestParam(required = false) String predicate )
     {
         List<SearchResponseDto> responseDto = recipeService.search( pageable, predicate );
         return ResponseEntity.ok( responseDto );
     }
+
     @PostMapping("/rate")
     public ResponseEntity<RecipeResponseDto> createRate(@RequestBody RecipeRate recipeRate){
         RecipeResponseDto responseDto = recipeService.rateCreate(recipeRate.getRecipeId(), recipeRate.getStars());

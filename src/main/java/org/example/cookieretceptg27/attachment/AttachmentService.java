@@ -33,7 +33,7 @@ public class AttachmentService {
     private final RecipeRepository recipeRepository;
     private final ModelMapper mapper;
 
-    @Value("${server.upload.dir}")
+    @Value("${service.upload.dir}")
     private String uploadDir;
 
 
@@ -50,7 +50,7 @@ public class AttachmentService {
                     .orElseThrow(() -> new EntityNotFoundException("User with id = %s not found".formatted(userId)));
 
 
-            Path directory = Paths.get(uploadDir+"\\resources\\img\\userImg");
+            Path directory = Paths.get(uploadDir+"userImg");
 
             if(!Files.exists(directory)){
                 Path directories = Files.createDirectories(directory);
@@ -106,7 +106,7 @@ public class AttachmentService {
             throw new IllegalArgumentException("Empty file uploaded");
         }
 
-        Path directory = Paths.get(uploadDir+"\\resources\\img\\userImg");
+        Path directory = Paths.get(uploadDir+"userImg");
 
         try{
             User user = userRepository.findById(userId)
@@ -155,7 +155,7 @@ public class AttachmentService {
             Recipe recipe = recipeRepository.findById(recipeId)
                     .orElseThrow(() -> new EntityNotFoundException("Recipe with id = %s not found".formatted(recipeId)));
 
-            Path directory = Paths.get(uploadDir+"\\resources\\img\\recipeImg");
+            Path directory = Paths.get(uploadDir+"recipeImg");
 
             if(!Files.exists(directory)){
                 Path directories = Files.createDirectories(directory);
@@ -208,7 +208,7 @@ public class AttachmentService {
             throw new IllegalArgumentException("Empty file uploaded");
         }
 
-        Path directory = Paths.get(uploadDir+"\\resources\\img\\recipeImg");
+        Path directory = Paths.get(uploadDir+"recipeImg");
 
 
         try{

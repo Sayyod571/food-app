@@ -41,7 +41,7 @@ public class Recipe {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("author_id")
     @JoinColumn( name = "author_id")
     @JsonIgnore
@@ -54,7 +54,7 @@ public class Recipe {
     private Category category;
 
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JoinTable(name = "recipe_ingredients",
             joinColumns = @JoinColumn(name = "recipe_id"),
@@ -62,7 +62,7 @@ public class Recipe {
     )
     private List<Ingredient> ingredients;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JoinTable(name = "recipe_reviews",
             joinColumns = @JoinColumn(name = "recipe_id"),
@@ -70,7 +70,7 @@ public class Recipe {
     )
     private List<Review> reviews;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @JoinTable(name = "recipe_steps",
             joinColumns = @JoinColumn(name = "recipe_id"),
@@ -78,11 +78,12 @@ public class Recipe {
     )
     private List<Step>steps;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JsonProperty("attachment_id")
     @JoinColumn(name = "attachment_id")
     private Attachment attachment;
-    @OneToMany(mappedBy = "recipes")
+
+    @OneToMany(mappedBy = "recipes", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<View> view;
 
