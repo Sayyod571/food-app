@@ -32,7 +32,7 @@ public class MockDataGenerator {
     public void generateMockRecipes(int numberOfRecipes) {
         Faker faker = new Faker();
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 5; i++) {
             User user = new User();
             user.setName(faker.name().fullName());
             user.setEmail(faker.internet().emailAddress());
