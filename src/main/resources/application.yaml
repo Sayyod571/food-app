@@ -2,7 +2,7 @@ server:
   port: 8080
 service:
   upload:
-    dir: src/main/resources/img
+    dir: src/main/resources
 spring:
   datasource:
     url: jdbc:postgresql://dpg-cmt3u8i1hbls73cncvvg-a.frankfurt-postgres.render.com:5432/food_hao5
@@ -14,6 +14,7 @@ spring:
     port: 587
     username: ikromova702@gmail.com
     password: sjuh ojto kntm epcr
+
 
     properties:
       mail:
