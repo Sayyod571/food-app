@@ -5,9 +5,9 @@ service:
     dir: src/main/resources
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-cmt3u8i1hbls73cncvvg-a.frankfurt-postgres.render.com:5432/food_hao5
-    username: food_hao5_user
-    password: y7s2Svf4onPaM5bcRHGO4NDyXuTPEImQ
+    url: jdbc:postgresql://roundhouse.proxy.rlwy.net:49258/railway
+    password: 15Be-De-1-GgC66*b41c5--GDDgCFc3b
+    username: postgres
 
   mail:
     host: smtp.gmail.com

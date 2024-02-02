@@ -55,7 +55,7 @@ public class User implements UserDetails {
     private List<User> users;
 
     @OneToOne
-    @JsonProperty("attachment_id")
+    @JsonProperty("image")
     @JoinColumn(name = "attachment_id")
     private Attachment attachment;
 

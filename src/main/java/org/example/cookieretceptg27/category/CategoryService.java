@@ -29,7 +29,9 @@ public class CategoryService {
     public CategoryResponseDto put(UUID id, CategoryUpdateDto categoryUpdateDto) {
         Category category = categoryRepository.findById(id).get();
         mapper.map(categoryUpdateDto,category);
-        return mapper.map(category, CategoryResponseDto.class);
+
+        Category saved = categoryRepository.save(category);
+        return mapper.map(saved, CategoryResponseDto.class);
     }
 
     public List<CategoryResponseDto> getAll() {
