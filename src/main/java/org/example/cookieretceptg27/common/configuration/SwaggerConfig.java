@@ -37,7 +37,7 @@ public class SwaggerConfig {
                         .url("https://springshop.wiki.github.org/docs"))
                 .servers(List.of(
                         new Server()
-//                                .url("http://16.171.172.208:8080/")
+//                                .url("http://localhost:8080/")
                                 .url("https://food-app-production-5c74.up.railway.app/")
                                 .description("Production")
                 ))

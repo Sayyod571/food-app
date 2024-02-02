@@ -1,5 +1,6 @@
 package org.example.cookieretceptg27.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.example.cookieretceptg27.attachment.dto.AttachmentResponseDto;
 import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
@@ -29,5 +30,6 @@ public class UserProfileResponseDto {
 
     private Integer following;
 
+    @JsonProperty("image")
     private AttachmentResponseDto attachment;
 }

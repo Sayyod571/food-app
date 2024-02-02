@@ -30,7 +30,7 @@ public class RecipeResponseDto {
 
     private LocalDateTime createdAt;
 
-    private CategoryResponseDto category;
+    private RecipeCategoryDto category;
 
     @JsonProperty("recipe_author")
     private UserResponseDto user;
@@ -43,5 +43,7 @@ public class RecipeResponseDto {
     private int reviews_size;
 
     private double stars;
+
+    private String link;
 
 }

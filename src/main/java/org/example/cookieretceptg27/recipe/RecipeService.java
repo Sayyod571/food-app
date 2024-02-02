@@ -11,10 +11,7 @@ import org.example.cookieretceptg27.ingredient.dto.IngredientCreateDto;
 import org.example.cookieretceptg27.ingredient.entity.Ingredient;
 import org.example.cookieretceptg27.rate.Rate;
 import org.example.cookieretceptg27.rate.RateRepository;
-import org.example.cookieretceptg27.recipe.dto.RecipeCreateDto;
-import org.example.cookieretceptg27.recipe.dto.RecipeResponseDto;
-import org.example.cookieretceptg27.recipe.dto.RecipeUpdateDto;
-import org.example.cookieretceptg27.recipe.dto.SearchResponseDto;
+import org.example.cookieretceptg27.recipe.dto.*;
 import org.example.cookieretceptg27.recipe.entity.Recipe;
 import org.example.cookieretceptg27.step.StepRepository;
 import org.example.cookieretceptg27.step.dto.StepCreateDto;
@@ -91,6 +88,7 @@ public class RecipeService {
 
         savedRecipe.setIngredients(ingredients1);
         savedRecipe.setSteps(stepList1);
+        savedRecipe.setLink("https://food-app-production-5c74.up.railway.app/recipe/"+savedRecipe.getId());
 
 
         Recipe saved = recipeRepository.save(savedRecipe);
@@ -98,7 +96,7 @@ public class RecipeService {
         categoryRepository.save(category);
         user.getRecipes().add(saved);
         userRepository.save(user);
-        CategoryResponseDto responseDto = mapper.map(category, CategoryResponseDto.class);
+        RecipeCategoryDto responseDto = mapper.map(category, RecipeCategoryDto.class);
         UserResponseDto userResponseDto = mapper.map(user, UserResponseDto.class);
 
         return new RecipeResponseDto(
@@ -111,7 +109,8 @@ public class RecipeService {
                 ingredients1,
                 stepList1,
                 0,
-                0
+                0,
+                saved.getLink()
 
         );
     }
@@ -237,7 +236,7 @@ public class RecipeService {
         if (sum != 0) {
             stars = sum / rateList.size();
         }
-        CategoryResponseDto responseDto = mapper.map(recipe.getCategory(), CategoryResponseDto.class);
+        RecipeCategoryDto responseDto = mapper.map(recipe.getCategory(), RecipeCategoryDto.class);
         UserResponseDto userResponseDto = mapper.map(recipe.getUser(), UserResponseDto.class);
         return new RecipeResponseDto(
                 recipe.getId(),
@@ -249,7 +248,8 @@ public class RecipeService {
                 recipe.getIngredients(),
                 recipe.getSteps(),
                 recipe.getReviews().size(),
-                stars
+                stars,
+                recipe.getLink()
         );
     }
 
@@ -275,5 +275,19 @@ public class RecipeService {
         }
 
         recipeRepository.deleteById(recipe.getId());
+    }
+
+    public RecipeResponseDto getByLink(UUID id) {
+        Recipe recipe = recipeRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("%s recipe not found".formatted(id))
+                );
+        return mapper.map(recipe, RecipeResponseDto.class);
+    }
+
+    public String getRecipeLink(UUID recipeId) {
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow(() -> new EntityNotFoundException("recipe not found"));
+        return  recipe.getLink();
     }
 }

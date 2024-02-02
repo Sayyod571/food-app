@@ -58,12 +58,12 @@ public class RecipeController {
         List<RecipeResponseDto>responseDtos=recipeService.getAll();
         return ResponseEntity.ok(responseDtos);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<RecipeResponseDto>getById(@PathVariable("id")UUID id)
-    {
-        RecipeResponseDto recipeResponseDto=recipeService.findById(id);
-        return ResponseEntity.ok(recipeResponseDto);
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<RecipeResponseDto>getById(@PathVariable("id")UUID id)
+//    {
+//        RecipeResponseDto recipeResponseDto=recipeService.findById(id);
+//        return ResponseEntity.ok(recipeResponseDto);
+//    }
 
     @GetMapping("/search")
     public ResponseEntity<List<SearchResponseDto>> getSearch(Pageable pageable, @RequestParam(required = false) String predicate )
@@ -77,5 +77,25 @@ public class RecipeController {
         RecipeResponseDto responseDto = recipeService.rateCreate(recipeRate.getRecipeId(), recipeRate.getStars());
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
+
+    @GetMapping("/link")
+    public ResponseEntity<String> getLink(@RequestParam("recipeId") UUID recipeId){
+
+        String link = recipeService.getRecipeLink(recipeId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(link);
+    }
+
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<RecipeResponseDto> getByLink(@PathVariable("recipeId") UUID recipeId){
+
+        RecipeResponseDto byLink = recipeService.getByLink(recipeId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(byLink);
+    }
+
+
 }
 

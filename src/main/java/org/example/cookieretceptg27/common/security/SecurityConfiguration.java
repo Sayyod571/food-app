@@ -34,7 +34,7 @@ public class SecurityConfiguration
             "/api/files/upload",
             "/auth/***",
             "/auth/otp/*",
-            "/recipe/upload",
+            "/recipe/link",
             "/recipe/**",
             "/auth/forgot-password/verify-email",
             "/home/ubuntu/img"

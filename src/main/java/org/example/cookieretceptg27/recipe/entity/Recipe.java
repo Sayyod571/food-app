@@ -36,6 +36,8 @@ public class Recipe {
     @Column(nullable = false)
     private Integer duration;
 
+    private String link;
+
     private LocalDate searchDate;
 
     @CreationTimestamp

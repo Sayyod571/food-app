@@ -75,7 +75,7 @@ public class MockDataGenerator {
     private List<Ingredient> generateMockIngredients(Faker faker, Recipe recipe) {
         List<Ingredient> ingredients = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
 
             Ingredient ingredient = new Ingredient();
             ingredient.setName(faker.food().ingredient());
